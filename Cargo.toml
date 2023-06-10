@@ -1,7 +1,12 @@
 [package]
 name = "anilist"
 version = "0.0.1"
+authors = ["Asthowen<contact@asthowen.fr>"]
 edition = "2021"
+description = "rust-anilist is a Rust client wrapper for AniList website."
+repository = "https://github.com/Asthowen/rust-anilist"
+readme = "README.md"
+homepage = "https://github.com/Asthowen"
 
 [dependencies]
 tokio = { version = "1.28.0", default-features = false, features = ["fs"]}
