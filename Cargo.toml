@@ -1,0 +1,9 @@
+[package]
+name = "anilist"
+version = "0.0.1"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1.28.0", default-features = false, features = ["fs"]}
+reqwest = { version = "0.11.17", features = ["json"] }
+serde_json = "1.0.96"
