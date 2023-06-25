@@ -10,8 +10,9 @@ pub struct NotificationOption {
     enabled: bool,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Default)]
 pub enum Type {
+    #[default]
     ActivityMessage,
     ActivityReply,
     Following,
@@ -26,10 +27,4 @@ pub enum Type {
     MediaDataChange,
     MediaMerge,
     MediaDeletion,
-}
-
-impl Default for Type {
-    fn default() -> Self {
-        Type::ActivityMessage
-    }
 }

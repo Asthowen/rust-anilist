@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022 Andriel Ferreira <https://github.com/AndrielFR>
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Default)]
 pub enum Color {
     Blue,
+    #[default]
     Purple,
     Pink,
     Orange,
@@ -11,10 +12,4 @@ pub enum Color {
     Green,
     Gray,
     Hex(String),
-}
-
-impl Default for Color {
-    fn default() -> Self {
-        Color::Purple
-    }
 }

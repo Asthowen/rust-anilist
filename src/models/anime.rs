@@ -66,9 +66,10 @@ pub struct Anime {
 
 impl Anime {
     pub(crate) fn parse(data: &serde_json::Value) -> Self {
-        let mut anime = Anime::default();
-
-        anime.id = data["id"].as_i64().unwrap();
+        let mut anime: Anime = Anime {
+            id: data["id"].as_i64().unwrap(),
+            ..Default::default()
+        };
 
         if let Some(id_mal) = data["idMal"].as_i64() {
             anime.id_mal = Some(id_mal);

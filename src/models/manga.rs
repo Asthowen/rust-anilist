@@ -60,9 +60,10 @@ pub struct Manga {
 
 impl Manga {
     pub(crate) fn parse(data: &serde_json::Value) -> Self {
-        let mut manga = Manga::default();
-
-        manga.id = data["id"].as_i64().unwrap();
+        let mut manga: Manga = Manga {
+            id: data["id"].as_i64().unwrap(),
+            ..Default::default()
+        };
 
         if let Some(id_mal) = data["idMal"].as_i64() {
             manga.id_mal = Some(id_mal);

@@ -7,17 +7,12 @@ pub struct Score {
     pub mean: i64,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Default)]
 pub enum Format {
     Point100,
+    #[default]
     Point10Decimal,
     Point10,
     Point5,
     Point3,
-}
-
-impl Default for Format {
-    fn default() -> Self {
-        Format::Point10Decimal
-    }
 }

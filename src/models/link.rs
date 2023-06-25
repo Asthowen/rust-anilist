@@ -18,15 +18,10 @@ pub struct Link {
     pub icon: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Default)]
 pub enum Type {
+    #[default]
     Info,
     Streaming,
     Social,
-}
-
-impl Default for Type {
-    fn default() -> Self {
-        Type::Info
-    }
 }

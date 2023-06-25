@@ -29,17 +29,6 @@ pub struct User {
     statistics: UserStatisticTypes,
 }
 
-impl User {
-    pub(crate) fn parse(data: &serde_json::Value, user: Option<User>) -> Self {
-        let mut user = match user {
-            Some(user) => user,
-            None => User::default(),
-        };
-
-        user
-    }
-}
-
 #[derive(Debug, Default, Clone, PartialEq)]
 struct Options {
     title_language: UserTitleLanguage,
@@ -54,8 +43,9 @@ struct Options {
     disabled_list_activity: Vec<ListActivityOption>,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Default)]
 pub enum UserTitleLanguage {
+    #[default]
     Romaji,
     English,
     Native,
@@ -64,23 +54,12 @@ pub enum UserTitleLanguage {
     NativeStylised,
 }
 
-impl Default for UserTitleLanguage {
-    fn default() -> Self {
-        UserTitleLanguage::Romaji
-    }
-}
-
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Default)]
 pub enum UserStaffNameLanguage {
     RomajiWestern,
+    #[default]
     Romaji,
     Native,
-}
-
-impl Default for UserStaffNameLanguage {
-    fn default() -> Self {
-        UserStaffNameLanguage::Romaji
-    }
 }
 
 #[derive(Debug, Default, Clone, PartialEq)]

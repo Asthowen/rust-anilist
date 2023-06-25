@@ -8,8 +8,6 @@ use crate::models::Image;
 use crate::models::Language;
 use crate::models::Name;
 
-use crate::GenericError;
-
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct Person {
     pub id: i64,
@@ -36,14 +34,16 @@ pub struct Person {
 
 impl Person {
     pub(crate) fn parse(data: &serde_json::Value) -> Self {
-        let mut person = Person::default();
-
-        person.id = data["id"].as_i64().unwrap();
+        let mut person: Person = Person {
+            id: data["id"].as_i64().unwrap(),
+            ..Default::default()
+        };
 
         if let Some(name_object) = data["name"].as_object() {
-            let mut name = Name::default();
-
-            name.first = name_object["first"].as_str().unwrap().to_string();
+            let mut name: Name = Name {
+                first: name_object["first"].as_str().unwrap().to_string(),
+                ..Default::default()
+            };
 
             if let Some(middle) = name_object["middle"].as_str() {
                 name.middle = Some(middle.to_string());

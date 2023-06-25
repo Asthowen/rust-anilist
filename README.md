@@ -20,6 +20,12 @@
 * The code must be cleaned with cargo fmt, run the command: `cargo fmt`
 
 ## Examples
+### Add to deps
+```toml
+[dependencies]
+anilist = { git = "https://github.com/Asthowen/rust-anilist", version = "0.0.2" }
+```
+
 ### Create client
 ```rust
 let anilist_client = AniListClientBuilder::builder()
@@ -30,8 +36,16 @@ let anilist_client = AniListClientBuilder::builder()
 
 ### Set manga progress
 ```rust
-anilist_client.set_progress(139741, 67, "access token").await;
+anilist_client.set_progress(67, 139741, "access token").await;
 ```
 
+### Set manga increment progress
+```rust
+anilist_client.set_increment_progress(1, 67, 139741, "access token").await;
+```
+
+## Thanks
+Thanks to [AndrielFR](https://github.com/AndrielFR) for the models: https://github.com/AndrielFR/rust-anilist
+
 ## License
-**[rust-anilist](https://github.com/Asthowen/rust-anilist) | Copyright ©Asthowen 2022 - now | All rights reserved**
+**[rust-anilist](https://github.com/Asthowen/rust-anilist) | [GNU General Public License v3.0](https://github.com/Asthowen/rust-anilist/blob/main/LICENSE)**

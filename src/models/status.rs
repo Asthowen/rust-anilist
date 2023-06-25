@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022 Andriel Ferreira <https://github.com/AndrielFR>
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Default)]
 pub enum Status {
     Finished,
     Releasing,
+    #[default]
     NotYetReleased,
     Cancelled,
     Hiatus,
@@ -14,10 +15,4 @@ pub enum Status {
     Dropped,
     Paused,
     Repeating,
-}
-
-impl Default for Status {
-    fn default() -> Self {
-        Status::NotYetReleased
-    }
 }

@@ -46,15 +46,10 @@ pub use tag::Tag;
 pub use title::Title;
 pub use user::User;
 
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq, Default)]
 pub enum MediaType {
     Anime,
     Manga,
+    #[default]
     Unknown,
-}
-
-impl Default for MediaType {
-    fn default() -> Self {
-        MediaType::Unknown
-    }
 }

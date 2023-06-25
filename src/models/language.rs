@@ -2,8 +2,9 @@
 //
 // Copyright (c) 2022 Andriel Ferreira <https://github.com/AndrielFR>
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Default)]
 pub enum Language {
+    #[default]
     Japanese,
     English,
     Korean,
@@ -30,10 +31,4 @@ pub enum Language {
     Nepali,
     Hindi,
     Urdu,
-}
-
-impl Default for Language {
-    fn default() -> Self {
-        Language::Japanese
-    }
 }

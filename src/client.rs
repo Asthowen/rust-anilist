@@ -46,7 +46,7 @@ impl<'a> AniListClientBuilder<'a> {
         self
     }
 
-    pub fn build(mut self) -> Result<AniListClient<'a>, GenericError> {
+    pub fn build(&self) -> Result<AniListClient<'a>, GenericError> {
         if self.reqwest_client.is_none() {
             return Err(GenericError(
                 "You have not filled in all the required elements in the builder: reqwest_client"
@@ -67,7 +67,7 @@ impl<'a> AniListClientBuilder<'a> {
         }
 
         Ok(AniListClient {
-            reqwest_client: self.reqwest_client.unwrap(),
+            reqwest_client: self.reqwest_client.clone().unwrap(),
             anilist_token: self.anilist_token.unwrap(),
             timeout: self.timeout.unwrap_or(Duration::from_secs(20)),
         })
@@ -82,7 +82,10 @@ pub struct AniListClient<'a> {
 }
 impl<'a> AniListClient<'a> {
     pub async fn get_anime(&self, variables: serde_json::Value) -> Option<Anime> {
-        let data: Value = self.request("anime", "get", variables, None).await.unwrap();
+        let data: Value = self
+            .request("anime", "get", variables, true, None)
+            .await
+            .unwrap();
         let mut anime: Anime = Anime::parse(&data["data"]["Media"]);
         anime.is_full_loaded = true;
 
@@ -90,7 +93,10 @@ impl<'a> AniListClient<'a> {
     }
 
     pub async fn get_manga(&self, variables: serde_json::Value) -> Option<Manga> {
-        let data = self.request("manga", "get", variables, None).await.unwrap();
+        let data = self
+            .request("manga", "get", variables, true, None)
+            .await
+            .unwrap();
         let mut manga = Manga::parse(&data["data"]["Media"]);
         manga.is_full_loaded = true;
 
@@ -99,7 +105,7 @@ impl<'a> AniListClient<'a> {
 
     pub async fn get_character(&self, variables: Value) -> Option<Character> {
         let data = self
-            .request("character", "get", variables, None)
+            .request("character", "get", variables, true, None)
             .await
             .unwrap();
         let mut character = crate::models::Character::parse(&data["data"]["Character"]);
@@ -110,20 +116,36 @@ impl<'a> AniListClient<'a> {
 
     pub async fn set_progress(
         &self,
-        media_id: i64,
         new_chapter: i64,
+        media_id: i64,
         access_token: &str,
-    ) -> Option<bool> {
-        let data = self
+    ) -> Result<Value, GenericError> {
+        self.request(
+            "progress",
+            "set",
+            json!({"progress": new_chapter, "mediaId": media_id, "hidden": true}),
+            false,
+            Some(access_token),
+        )
+        .await
+    }
+
+    pub async fn set_increment_progress(
+        &self,
+        progress_start: i64,
+        progress_end: i64,
+        media_id: i64,
+        access_token: &str,
+    ) -> Result<Value, GenericError> {
+        self
             .request(
-                "progress",
+                "progress_increment",
                 "set",
-                json!({"progress": new_chapter, "mediaId": media_id, "hidden": true}),
+                json!({"progress_start": progress_start, "progress_end": progress_end, "mediaId": media_id, "hidden": true}),
+                false,
                 Some(access_token),
             )
-            .await;
-
-        Some(true)
+            .await
     }
 
     async fn request(
@@ -131,6 +153,7 @@ impl<'a> AniListClient<'a> {
         media_type: &str,
         action: &str,
         variables: Value,
+        need_auth: bool,
         access_token: Option<&str>,
     ) -> Result<Value, GenericError> {
         let query: &str = if let Some(query) = AniListClient::get_query(media_type, action) {
@@ -155,18 +178,16 @@ impl<'a> AniListClient<'a> {
             .headers(headers)
             .timeout(self.timeout)
             .body(json.to_string());
-        // body = body.bearer_auth(&self.anilist_token);
+        if need_auth {
+            body = body.bearer_auth(self.anilist_token);
+        }
 
         let response: String = body.send().await?.text().await?;
-        println!("{}", response);
         let result = serde_json::from_str(&response);
         let result_value: Value = if let Ok(result_value) = result {
             result_value
         } else if let Err(result_error) = result {
-            return Err(GenericError(format!(
-                "serde_json error: {}",
-                result_error.to_string()
-            )));
+            return Err(GenericError(format!("serde_json error: {}", result_error)));
         } else {
             return Err(GenericError("Unknown error".to_owned()));
         };
@@ -175,7 +196,7 @@ impl<'a> AniListClient<'a> {
     }
 
     pub fn get_query(media_type: &str, action: &str) -> Option<&'a str> {
-        const MEDIA_TYPES: [&str; 8] = [
+        const MEDIA_TYPES: [&str; 9] = [
             "anime",
             "manga",
             "character",
@@ -184,6 +205,7 @@ impl<'a> AniListClient<'a> {
             "studio",
             "progress",
             "mediasids",
+            "progress_increment",
         ];
         if !MEDIA_TYPES.contains(&media_type) {
             return None;
@@ -196,7 +218,7 @@ impl<'a> AniListClient<'a> {
             ("get", "person") => Some(queries::get_person::GET_PERSON),
             ("get", "mediasids") => Some(queries::get_mediasids::GET_MEDIAS_IDS),
             ("set", "progress") => Some(queries::set_progress::SET_PROGRESS),
-
+            ("set", "progress_increment") => Some(queries::set_progress::SET_PROGRESS_INCREMENT),
             _ => None,
         }
     }

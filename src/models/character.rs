@@ -7,8 +7,6 @@ use crate::models::Image;
 use crate::models::Name;
 use crate::models::Person;
 
-use crate::GenericError;
-
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct Character {
     pub id: i64,
@@ -44,13 +42,13 @@ impl Character {
                     alternative: object["alternative"]
                         .as_array()
                         .unwrap()
-                        .into_iter()
+                        .iter()
                         .map(|item| item.as_str().unwrap().to_string())
                         .collect::<Vec<String>>(),
                     alternative_spoiler: object["alternativeSpoiler"]
                         .as_array()
                         .unwrap()
-                        .into_iter()
+                        .iter()
                         .map(|item| item.as_str().unwrap().to_string())
                         .collect::<Vec<String>>(),
                     user_preferred: object["userPreferred"].as_str().map(String::from),
@@ -98,15 +96,10 @@ impl Character {
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Default)]
 pub enum Role {
+    #[default]
     Background,
     Main,
     Supporting,
-}
-
-impl Default for Role {
-    fn default() -> Self {
-        Role::Background
-    }
 }

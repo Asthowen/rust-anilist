@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022 Andriel Ferreira <https://github.com/AndrielFR>
 
-use crate::GenericError;
-
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct Studio {
     pub id: i64,
