@@ -1,6 +1,6 @@
 mod client;
 mod errors;
-mod models;
+pub mod models;
 mod queries;
 
 pub use self::client::{AniListClient, AniListClientBuilder};

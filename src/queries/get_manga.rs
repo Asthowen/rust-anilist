@@ -119,6 +119,7 @@ query ($id: Int, $id_mal: Int) {
           alternative
           userPreferred
         }
+        primaryOccupations
         languageV2
         gender
         siteUrl

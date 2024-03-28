@@ -81,9 +81,9 @@ pub struct AniListClient<'a> {
     timeout: Duration,
 }
 impl<'a> AniListClient<'a> {
-    pub async fn get_anime(&self, variables: serde_json::Value) -> Option<Anime> {
+    pub async fn get_anime(&self, variables: Value) -> Option<Anime> {
         let data: Value = self
-            .request("anime", "get", variables, true, None)
+            .request("anime", "get", variables, false, None)
             .await
             .unwrap();
         let mut anime: Anime = Anime::parse(&data["data"]["Media"]);
@@ -92,9 +92,9 @@ impl<'a> AniListClient<'a> {
         Some(anime)
     }
 
-    pub async fn get_manga(&self, variables: serde_json::Value) -> Option<Manga> {
+    pub async fn get_manga(&self, variables: Value) -> Option<Manga> {
         let data = self
-            .request("manga", "get", variables, true, None)
+            .request("manga", "get", variables, false, None)
             .await
             .unwrap();
         let mut manga = Manga::parse(&data["data"]["Media"]);
@@ -105,10 +105,10 @@ impl<'a> AniListClient<'a> {
 
     pub async fn get_character(&self, variables: Value) -> Option<Character> {
         let data = self
-            .request("character", "get", variables, true, None)
+            .request("character", "get", variables, false, None)
             .await
             .unwrap();
-        let mut character = crate::models::Character::parse(&data["data"]["Character"]);
+        let mut character = Character::parse(&data["data"]["Character"]);
         character.is_full_loaded = true;
 
         Some(character)

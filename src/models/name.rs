@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022 Andriel Ferreira <https://github.com/AndrielFR>
 
-#[derive(Debug, Default, Clone, PartialEq)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Name {
     pub first: String,
     pub middle: Option<String>,

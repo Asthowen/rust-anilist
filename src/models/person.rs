@@ -1,21 +1,23 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022 Andriel Ferreira <https://github.com/AndrielFR>
 
+use crate::models::occupations::Occupation;
 use crate::models::Character;
 use crate::models::Date;
 use crate::models::Gender;
 use crate::models::Image;
 use crate::models::Language;
 use crate::models::Name;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Default, Clone, PartialEq)]
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Person {
     pub id: i64,
     pub name: Name,
     pub language: Language,
     pub image: Option<Image>,
     pub description: Option<String>,
-    pub primary_occupations: Option<Vec<String>>,
+    pub primary_occupations: Option<Vec<Occupation>>,
     pub gender: Gender,
     pub date_of_birth: Option<Date>,
     pub date_of_death: Option<Date>,
@@ -35,43 +37,28 @@ pub struct Person {
 impl Person {
     pub(crate) fn parse(data: &serde_json::Value) -> Self {
         let mut person: Person = Person {
-            id: data["id"].as_i64().unwrap(),
+            id: data["id"].as_i64().unwrap_or_default(),
             ..Default::default()
         };
 
         if let Some(name_object) = data["name"].as_object() {
-            let mut name: Name = Name {
-                first: name_object["first"].as_str().unwrap().to_string(),
-                ..Default::default()
+            let name = Name {
+                first: name_object["first"].as_str().unwrap_or_default().to_owned(),
+                middle: name_object["middle"].as_str().map(String::from),
+                last: name_object["last"].as_str().map(String::from),
+                full: name_object["full"].as_str().unwrap_or_default().to_owned(),
+                native: name_object["native"].as_str().map(String::from),
+                alternative: name_object["alternative"]
+                    .as_array()
+                    .map(|arr| {
+                        arr.iter()
+                            .map(|n| n.as_str().unwrap_or_default().to_owned())
+                            .collect()
+                    })
+                    .unwrap_or_default(),
+                alternative_spoiler: Vec::default(),
+                user_preferred: name_object["userPreferred"].as_str().map(String::from),
             };
-
-            if let Some(middle) = name_object["middle"].as_str() {
-                name.middle = Some(middle.to_string());
-            }
-
-            if let Some(last) = name_object["last"].as_str() {
-                name.last = Some(last.to_string());
-            }
-
-            name.full = name_object["full"].as_str().unwrap().to_string();
-
-            if let Some(native) = name_object["native"].as_str() {
-                name.native = Some(native.to_string());
-            }
-
-            if let Some(alternative_array) = name_object["alternative"].as_array() {
-                let mut alternative = Vec::with_capacity(alternative_array.len());
-
-                for alternative_name in alternative_array {
-                    alternative.push(alternative_name.as_str().unwrap().to_string());
-                }
-
-                name.alternative = alternative;
-            }
-
-            if let Some(user_preferred) = name_object["userPreferred"].as_str() {
-                name.user_preferred = Some(user_preferred.to_string());
-            }
 
             person.name = name;
         }
@@ -109,93 +96,109 @@ impl Person {
 
         if let Some(image_object) = data["image"].as_object() {
             person.image = Some(Image {
-                large: image_object["large"].as_str().unwrap().to_string(),
-                medium: image_object["medium"].as_str().unwrap().to_string(),
+                large: image_object["large"]
+                    .as_str()
+                    .unwrap_or_default()
+                    .to_owned(),
+                medium: image_object["medium"]
+                    .as_str()
+                    .unwrap_or_default()
+                    .to_owned(),
             });
         }
 
         if let Some(date_of_birth) = data["dateOfBirth"].as_object() {
-            let mut date = Date::default();
-
-            if let Some(year) = date_of_birth["year"].as_i64() {
-                date.year = Some(year);
-            }
-            if let Some(month) = date_of_birth["month"].as_i64() {
-                date.month = Some(month);
-            }
-            if let Some(day) = date_of_birth["day"].as_i64() {
-                date.day = Some(day);
-            }
+            let date = Date {
+                year: date_of_birth["year"].as_i64(),
+                month: date_of_birth["month"].as_i64(),
+                day: date_of_birth["day"].as_i64(),
+            };
 
             person.date_of_birth = Some(date);
         }
 
         if let Some(date_of_death) = data["dateOfDeath"].as_object() {
-            let mut date = Date::default();
-
-            if let Some(year) = date_of_death["year"].as_i64() {
-                date.year = Some(year);
-            }
-            if let Some(month) = date_of_death["month"].as_i64() {
-                date.month = Some(month);
-            }
-            if let Some(day) = date_of_death["day"].as_i64() {
-                date.day = Some(day);
-            }
+            let date = Date {
+                year: date_of_death["year"].as_i64(),
+                month: date_of_death["month"].as_i64(),
+                day: date_of_death["day"].as_i64(),
+            };
 
             person.date_of_death = Some(date);
         }
 
-        if let Some(age) = data["age"].as_i64() {
-            person.age = Some(age);
-        }
+        person.age = data["age"].as_i64();
 
         if let Some(years_active) = data["yearsActive"].as_array() {
             person.years_active = match years_active.len() {
                 2 => Some((
-                    years_active[0].as_u64().unwrap(),
-                    years_active[1].as_u64().unwrap(),
+                    years_active[0].as_u64().unwrap_or_default(),
+                    years_active[1].as_u64().unwrap_or_default(),
                 )),
-                1 => Some((years_active[0].as_u64().unwrap(), 0)),
+                1 => Some((years_active[0].as_u64().unwrap_or_default(), 0)),
                 _ => None,
             };
         }
 
-        if let Some(home_town) = data["homeTown"].as_str() {
-            person.home_town = Some(home_town.to_string());
+        person.home_town = data["homeTown"].as_str().map(String::from);
+        person.blood_type = data["bloodType"].as_str().map(String::from);
+        person.is_favourite = data["isFavourite"].as_bool();
+        person.is_favourite_blocked = data["isFavouriteBlocked"].as_bool();
+        person.url = data["siteUrl"].as_str().unwrap_or_default().to_owned();
+
+        if let Some(characters) = data["characters"]
+            .as_object()
+            .and_then(|obj| obj["nodes"].as_array())
+        {
+            let characters: Vec<Character> = characters.iter().map(Character::parse).collect();
+            person.characters = Some(characters);
         }
 
-        if let Some(blood_type) = data["bloodType"].as_str() {
-            person.blood_type = Some(blood_type.to_string());
-        }
+        person.favourites = data["favourites"].as_i64().unwrap_or_default();
 
-        if let Some(is_favourite) = data["isFavourite"].as_bool() {
-            person.is_favourite = Some(is_favourite);
-        }
+        if let Some(primary_occupations) = data["primaryOccupations"].as_array() {
+            let occupations = primary_occupations
+                .iter()
+                .filter_map(|occupation| {
+                    occupation.as_str().and_then(|occ| {
+                        match occ.to_uppercase().replace(' ', "").as_str() {
+                            "ANIMATOR" => Some(Occupation::Animator),
+                            "ARRANGER" => Some(Occupation::Arranger),
+                            "ARTIST" => Some(Occupation::Artist),
+                            "AUDIOENGINEER" => Some(Occupation::AudioEngineer),
+                            "BACKGROUNDARTIST" => Some(Occupation::BackgroundArtist),
+                            "BAND" => Some(Occupation::Band),
+                            "CGARTIST" => Some(Occupation::CGArtist),
+                            "COMPOSER" => Some(Occupation::Composer),
+                            "COMPOSITEARTIST" => Some(Occupation::CompositeArtist),
+                            "DESIGNER" => Some(Occupation::Designer),
+                            "DIRECTOR" => Some(Occupation::Director),
+                            "EDITOR" => Some(Occupation::Editor),
+                            "ILLUSTRATOR" => Some(Occupation::Illustrator),
+                            "LYRICIST" => Some(Occupation::Lyricist),
+                            "MANGAKA" => Some(Occupation::Mangaka),
+                            "MUSICIAN" => Some(Occupation::Musician),
+                            "PAINTER" => Some(Occupation::Painter),
+                            "PRODUCER" => Some(Occupation::Producer),
+                            "PRODUCTIONMANAGER" => Some(Occupation::ProductionManager),
+                            "SCRIPTWRITER" => Some(Occupation::ScriptWriter),
+                            "STORYBOARDARTIST" => Some(Occupation::StoryBoardArtist),
+                            "TRANSLATOR" => Some(Occupation::Translator),
+                            "VOCALIST" => Some(Occupation::Vocalist),
+                            "VOICEACTOR" => Some(Occupation::VoiceActor),
+                            "WRITER" => Some(Occupation::Writer),
+                            _ => None,
+                        }
+                    })
+                })
+                .collect::<Vec<_>>();
 
-        if let Some(is_favourite_blocked) = data["isFavouriteBlocked"].as_bool() {
-            person.is_favourite_blocked = Some(is_favourite_blocked);
-        }
-
-        person.url = data["siteUrl"].as_str().unwrap().to_string();
-
-        if let Some(characters) = data["characters"].as_object() {
-            if let Some(nodes) = characters["nodes"].as_array() {
-                let mut characters: Vec<Character> = Vec::with_capacity(nodes.len());
-
-                for node in nodes {
-                    characters.push(Character::parse(node));
-                }
-
-                person.characters = Some(characters);
+            if !occupations.is_empty() {
+                person.primary_occupations = Some(occupations);
             }
         }
 
-        person.favourites = data["favourites"].as_i64().unwrap();
-
-        if let Some(mod_notes) = data["modNotes"].as_str() {
-            person.mod_notes = Some(mod_notes.to_string());
-        }
+        person.mod_notes = data["modNotes"].as_str().map(String::from);
 
         person
     }

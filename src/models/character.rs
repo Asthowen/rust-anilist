@@ -6,8 +6,9 @@ use crate::models::Gender;
 use crate::models::Image;
 use crate::models::Name;
 use crate::models::Person;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Default, Clone, PartialEq)]
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Character {
     pub id: i64,
     pub name: Name,
@@ -30,30 +31,30 @@ pub struct Character {
 impl Character {
     pub(crate) fn parse(data: &serde_json::Value) -> Self {
         Self {
-            id: data["id"].as_i64().unwrap(),
+            id: data["id"].as_i64().unwrap_or_default(),
             name: data["name"]
                 .as_object()
                 .map(|object| Name {
-                    first: object["first"].as_str().unwrap().to_string(),
+                    first: object["first"].as_str().unwrap_or_default().to_owned(),
                     middle: object["middle"].as_str().map(String::from),
                     last: object["last"].as_str().map(String::from),
-                    full: object["full"].as_str().unwrap().to_string(),
+                    full: object["full"].as_str().unwrap_or_default().to_owned(),
                     native: object["native"].as_str().map(String::from),
                     alternative: object["alternative"]
                         .as_array()
                         .unwrap()
                         .iter()
-                        .map(|item| item.as_str().unwrap().to_string())
+                        .map(|item| item.as_str().unwrap_or_default().to_owned())
                         .collect::<Vec<String>>(),
                     alternative_spoiler: object["alternativeSpoiler"]
                         .as_array()
                         .unwrap()
                         .iter()
-                        .map(|item| item.as_str().unwrap().to_string())
+                        .map(|item| item.as_str().unwrap_or_default().to_owned())
                         .collect::<Vec<String>>(),
                     user_preferred: object["userPreferred"].as_str().map(String::from),
                 })
-                .unwrap(),
+                .unwrap_or_default(),
             role: data["role"]
                 .as_str()
                 .map(|role| match role.to_ascii_lowercase().as_str() {
@@ -64,17 +65,17 @@ impl Character {
             image: data["image"]
                 .as_object()
                 .map(|object| Image {
-                    large: object["large"].as_str().unwrap().to_string(),
-                    medium: object["medium"].as_str().unwrap().to_string(),
+                    large: object["large"].as_str().unwrap_or_default().to_owned(),
+                    medium: object["medium"].as_str().unwrap_or_default().to_owned(),
                 })
-                .unwrap(),
-            description: data["description"].as_str().unwrap().to_string(),
+                .unwrap_or_default(),
+            description: data["description"].as_str().unwrap_or_default().to_owned(),
             gender: data["gender"].as_str().map(|gender| {
                 match gender.to_ascii_lowercase().as_str() {
                     "male" => Gender::Male,
                     "female" => Gender::Female,
                     "nonbinary" => Gender::NonBinary,
-                    _ => Gender::Other(gender.to_string()),
+                    _ => Gender::Other(gender.to_owned()),
                 }
             }),
             date_of_birth: data["dateOfBirth"].as_object().map(|object| {
@@ -88,7 +89,7 @@ impl Character {
             blood_type: data["bloodType"].as_str().map(String::from),
             is_favourite: data["isFavourite"].as_bool(),
             is_favourite_blocked: data["isFavouriteBlocked"].as_bool(),
-            url: data["siteUrl"].as_str().unwrap().to_string(),
+            url: data["siteUrl"].as_str().unwrap_or_default().to_owned(),
             favourites: data["favourites"].as_i64(),
             mod_notes: data["modNotes"].as_str().map(String::from),
             ..Default::default()
@@ -96,7 +97,7 @@ impl Character {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Default)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub enum Role {
     #[default]
     Background,

@@ -4,9 +4,10 @@
 use crate::models::Anime;
 use crate::models::Manga;
 use crate::models::MediaType;
+use serde::{Deserialize, Serialize};
 
 // TODO: Use generic type
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Relation {
     pub media_type: MediaType,
     pub anime: Option<Anime>,
@@ -16,7 +17,7 @@ pub struct Relation {
     pub is_main_studio: bool,
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum Type {
     Adaptation,
     Prequel,

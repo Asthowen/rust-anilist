@@ -19,8 +19,9 @@ use crate::models::Tag;
 use crate::models::Title;
 use crate::models::{Link, LinkType};
 use crate::models::{Relation, RelationType};
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Default, Clone, PartialEq)]
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Anime {
     pub id: i64,
     pub id_mal: Option<i64>,
@@ -67,23 +68,23 @@ pub struct Anime {
 impl Anime {
     pub(crate) fn parse(data: &serde_json::Value) -> Self {
         let mut anime: Anime = Anime {
-            id: data["id"].as_i64().unwrap(),
+            id: data["id"].as_i64().unwrap_or_default(),
+            id_mal: data["idMal"].as_i64(),
             ..Default::default()
         };
 
-        if let Some(id_mal) = data["idMal"].as_i64() {
-            anime.id_mal = Some(id_mal);
-        }
-
-        let title = data["title"].as_object().unwrap();
-        anime.title = Title {
-            romaji: Some(title["romaji"].as_str().unwrap().to_string()),
-            english: title["english"].as_str().map(|title| title.to_string()),
-            native: title["native"].as_str().unwrap().to_string(),
-            user_preferred: Some(title["userPreferred"].as_str().unwrap().to_string()),
+        anime.title = if let Some(title) = data["title"].as_object() {
+            Title {
+                romaji: title["romaji"].as_str().map(String::from),
+                english: title["english"].as_str().map(String::from),
+                native: title["native"].as_str().unwrap_or_default().to_owned(),
+                user_preferred: title["userPreferred"].as_str().map(String::from),
+            }
+        } else {
+            Title::default()
         };
 
-        let format = data["format"].as_str().unwrap();
+        let format = data["format"].as_str().unwrap_or_default();
         anime.format = match format {
             "TV_SHORT" => Format::TvShort,
             "MOVIE" => Format::Movie,
@@ -97,7 +98,7 @@ impl Anime {
             _ => Format::default(),
         };
 
-        let status = data["status"].as_str().unwrap();
+        let status = data["status"].as_str().unwrap_or_default();
         anime.status = match status {
             "FINISHED" => Status::Finished,
             "RELEASING" => Status::Releasing,
@@ -106,36 +107,27 @@ impl Anime {
             _ => Status::default(),
         };
 
-        anime.description = data["description"].as_str().unwrap().to_string();
+        anime.description = data["description"]
+            .as_str()
+            .map(String::from)
+            .unwrap_or_default();
 
         if let Some(start_date) = data["startDate"].as_object() {
-            let mut date = Date::default();
-
-            if let Some(year) = start_date["year"].as_i64() {
-                date.year = Some(year);
-            }
-            if let Some(month) = start_date["month"].as_i64() {
-                date.month = Some(month);
-            }
-            if let Some(day) = start_date["day"].as_i64() {
-                date.day = Some(day);
-            }
+            let date = Date {
+                year: start_date["year"].as_i64(),
+                month: start_date["month"].as_i64(),
+                day: start_date["day"].as_i64(),
+            };
 
             anime.start_date = Some(date);
         }
 
         if let Some(end_date) = data["endDate"].as_object() {
-            let mut date = Date::default();
-
-            if let Some(year) = end_date["year"].as_i64() {
-                date.year = Some(year);
-            }
-            if let Some(month) = end_date["month"].as_i64() {
-                date.month = Some(month);
-            }
-            if let Some(day) = end_date["day"].as_i64() {
-                date.day = Some(day);
-            }
+            let date = Date {
+                year: end_date["year"].as_i64(),
+                month: end_date["month"].as_i64(),
+                day: end_date["day"].as_i64(),
+            };
 
             anime.end_date = Some(date);
         }
@@ -149,29 +141,12 @@ impl Anime {
             };
         }
 
-        if let Some(season_year) = data["seasonYear"].as_i64() {
-            anime.season_year = Some(season_year);
-        }
-
-        if let Some(season_int) = data["seasonInt"].as_i64() {
-            anime.season_int = Some(season_int);
-        }
-
-        if let Some(episodes) = data["episodes"].as_i64() {
-            anime.episodes = Some(episodes);
-        }
-
-        if let Some(duration) = data["duration"].as_i64() {
-            anime.duration = Some(duration);
-        }
-
-        if let Some(country_of_origin) = data["countryOfOrigin"].as_str() {
-            anime.country_of_origin = Some(country_of_origin.to_string());
-        }
-
-        if let Some(is_licensed) = data["isLicensed"].as_bool() {
-            anime.is_licensed = Some(is_licensed);
-        }
+        anime.season_year = data["seasonYear"].as_i64();
+        anime.season_int = data["seasonInt"].as_i64();
+        anime.episodes = data["episodes"].as_i64();
+        anime.duration = data["duration"].as_i64();
+        anime.country_of_origin = data["countryOfOrigin"].as_str().map(String::from);
+        anime.is_licensed = data["isLicensed"].as_bool();
 
         if let Some(source) = data["source"].as_str() {
             anime.source = match source {
@@ -185,102 +160,67 @@ impl Anime {
             };
         }
 
-        if let Some(hashtag) = data["hashtag"].as_str() {
-            anime.hashtag = Some(hashtag.to_string());
-        }
-
-        if let Some(updated_at) = data["updatedAt"].as_i64() {
-            anime.updated_at = Some(updated_at);
-        }
+        anime.hashtag = data["hashtag"].as_str().map(String::from);
+        anime.updated_at = data["updatedAt"].as_i64();
 
         if let Some(cover_image) = data["coverImage"].as_object() {
-            let mut cover = Cover::default();
-
-            if let Some(extra_large) = cover_image["extraLarge"].as_str() {
-                cover.extra_large = Some(extra_large.to_string());
-            }
-
-            if let Some(large) = cover_image["large"].as_str() {
-                cover.large = Some(large.to_string());
-            }
-
-            if let Some(medium) = cover_image["medium"].as_str() {
-                cover.medium = Some(medium.to_string());
-            }
-
-            if let Some(color) = cover_image["color"].as_str() {
-                cover.color = Some(Color::Hex(color.to_string()));
-            }
+            let cover = Cover {
+                extra_large: cover_image["extraLarge"].as_str().map(String::from),
+                large: cover_image["large"].as_str().map(String::from),
+                medium: cover_image["medium"].as_str().map(String::from),
+                color: cover_image["color"]
+                    .as_str()
+                    .map(|c| Color::Hex(c.to_owned())),
+            };
 
             anime.cover = cover;
         }
 
-        if let Some(banner) = data["bannerImage"].as_str() {
-            anime.banner = Some(banner.to_string());
-        }
+        anime.banner = data["bannerImage"].as_str().map(String::from);
 
         if let Some(genres_array) = data["genres"].as_array() {
-            let mut genres = Vec::with_capacity(genres_array.len());
-
-            for genre in genres_array {
-                genres.push(genre.as_str().unwrap().to_string());
-            }
+            let genres = genres_array
+                .iter()
+                .map(|genre| genre.as_str().unwrap_or_default().to_owned())
+                .collect::<Vec<String>>();
 
             anime.genres = Some(genres);
         }
 
         if let Some(synonyms_array) = data["synonyms"].as_array() {
-            let mut synonyms = Vec::with_capacity(synonyms_array.len());
-
-            for synonym in synonyms_array {
-                synonyms.push(synonym.as_str().unwrap().to_string());
-            }
+            let synonyms = synonyms_array
+                .iter()
+                .map(|synonym| synonym.as_str().unwrap_or_default().to_owned())
+                .collect::<Vec<String>>();
 
             anime.synonyms = Some(synonyms);
         }
 
-        let mut score = Score::default();
-        if let Some(average) = data["averageScore"].as_i64() {
-            score.average = average;
-        }
+        anime.score = Score {
+            average: data["averageScore"].as_i64().unwrap_or_default(),
+            mean: data["meanScore"].as_i64().unwrap_or_default(),
+        };
 
-        if let Some(mean) = data["meanScore"].as_i64() {
-            score.mean = mean;
-        }
-        anime.score = score;
-
-        if let Some(popularity) = data["popularity"].as_i64() {
-            anime.popularity = Some(popularity);
-        }
-
-        if let Some(is_locked) = data["isLocked"].as_bool() {
-            anime.is_locked = Some(is_locked);
-        }
-
-        if let Some(trending) = data["trendig"].as_i64() {
-            anime.trending = Some(trending);
-        }
-
-        if let Some(favourites) = data["favourites"].as_i64() {
-            anime.favourites = Some(favourites);
-        }
+        anime.popularity = data["popularity"].as_i64();
+        anime.is_locked = data["isLocked"].as_bool();
+        anime.trending = data["trendig"].as_i64();
+        anime.favourites = data["favourites"].as_i64();
 
         if let Some(tags_array) = data["tags"].as_array() {
-            let mut tags: Vec<Tag> = Vec::with_capacity(tags_array.len());
-
-            for tag in tags_array {
-                tags.push(Tag {
-                    id: tag["id"].as_i64().unwrap(),
-                    name: tag["name"].as_str().unwrap().to_string(),
-                    description: tag["description"].as_str().unwrap().to_string(),
-                    category: tag["category"].as_str().unwrap().to_string(),
-                    rank: tag["rank"].as_i64().unwrap(),
-                    is_general_spoiler: tag["isGeneralSpoiler"].as_bool().unwrap(),
-                    is_media_spoiler: tag["isMediaSpoiler"].as_bool().unwrap(),
-                    is_adult: tag["isAdult"].as_bool().unwrap(),
+            let tags = tags_array
+                .iter()
+                .map(|tag| Tag {
+                    id: tag["id"].as_i64().unwrap_or_default(),
+                    name: tag["name"].as_str().unwrap_or_default().to_owned(),
+                    description: tag["description"].as_str().unwrap_or_default().to_owned(),
+                    category: tag["category"].as_str().unwrap_or_default().to_owned(),
+                    rank: tag["rank"].as_i64().unwrap_or_default(),
+                    is_general_spoiler: tag["isGeneralSpoiler"].as_bool().unwrap_or_default(),
+                    is_media_spoiler: tag["isMediaSpoiler"].as_bool().unwrap_or_default(),
+                    is_adult: tag["isAdult"].as_bool().unwrap_or_default(),
                     user_id: tag["userId"].as_i64(),
-                });
-            }
+                })
+                .collect::<Vec<Tag>>();
 
             anime.tags = Some(tags);
         }
@@ -290,8 +230,12 @@ impl Anime {
                 let mut relations: Vec<Relation> = Vec::with_capacity(edges.len());
 
                 for edge in edges {
-                    let node = edge.get("node").unwrap();
-                    let media_type = match node["type"].as_str().unwrap() {
+                    let node = if let Some(node) = edge.get("node") {
+                        node
+                    } else {
+                        continue;
+                    };
+                    let media_type = match node["type"].as_str().unwrap_or_default() {
                         "ANIME" => MediaType::Anime,
                         "MANGA" => MediaType::Manga,
                         _ => MediaType::default(),
@@ -306,8 +250,8 @@ impl Anime {
                             MediaType::Manga => Some(Manga::parse(node)),
                             _ => None,
                         },
-                        id: edge["id"].as_i64().unwrap(),
-                        relation_type: match edge["relationType"].as_str().unwrap() {
+                        id: edge["id"].as_i64().unwrap_or_default(),
+                        relation_type: match edge["relationType"].as_str().unwrap_or_default() {
                             "ADAPTATION" => RelationType::Adaptation,
                             "PREQUEL" => RelationType::Prequel,
                             "SEQUEL" => RelationType::Sequel,
@@ -322,7 +266,7 @@ impl Anime {
                             "CONTAINS" => RelationType::Contains,
                             _ => RelationType::Source,
                         },
-                        is_main_studio: edge["isMainStudio"].as_bool().unwrap(),
+                        is_main_studio: edge["isMainStudio"].as_bool().unwrap_or_default(),
                     });
                 }
 
@@ -366,24 +310,18 @@ impl Anime {
             }
         }
 
-        if let Some(is_favourite) = data["isFavourite"].as_bool() {
-            anime.is_favourite = Some(is_favourite);
-        }
-
-        if let Some(is_favourite_blocked) = data["isFavouriteBlocked"].as_bool() {
-            anime.is_favourite_blocked = Some(is_favourite_blocked);
-        }
-
-        if let Some(is_adult) = data["isAdult"].as_bool() {
-            anime.is_adult = Some(is_adult);
-        }
+        anime.is_favourite = data["isFavourite"].as_bool();
+        anime.is_favourite_blocked = data["isFavouriteBlocked"].as_bool();
+        anime.is_adult = data["isAdult"].as_bool();
 
         if let Some(next_airing_episode) = data["nextAiringEpisode"].as_object() {
             anime.next_airing_episode = Some(AiringEpisode {
-                id: next_airing_episode["id"].as_i64().unwrap(),
-                at: next_airing_episode["airingAt"].as_i64().unwrap(),
-                time_until: next_airing_episode["timeUntilAiring"].as_i64().unwrap(),
-                episode: next_airing_episode["episode"].as_i64().unwrap(),
+                id: next_airing_episode["id"].as_i64().unwrap_or_default(),
+                at: next_airing_episode["airingAt"].as_i64().unwrap_or_default(),
+                time_until: next_airing_episode["timeUntilAiring"]
+                    .as_i64()
+                    .unwrap_or_default(),
+                episode: next_airing_episode["episode"].as_i64().unwrap_or_default(),
             });
         }
 
@@ -393,10 +331,13 @@ impl Anime {
             for external_link in external_links_array {
                 external_links.push(Link {
                     id: external_link["id"].as_i64(),
-                    url: external_link["url"].as_str().unwrap().to_string(),
-                    site: external_link["site"].as_str().unwrap().to_string(),
+                    url: external_link["url"].as_str().unwrap_or_default().to_owned(),
+                    site: external_link["site"]
+                        .as_str()
+                        .unwrap_or_default()
+                        .to_owned(),
                     site_id: external_link["siteId"].as_i64(),
-                    link_type: match external_link["type"].as_str().unwrap() {
+                    link_type: match external_link["type"].as_str().unwrap_or_default() {
                         "STREAMING" => Some(LinkType::Streaming),
                         "SOCIAL" => Some(LinkType::Social),
                         _ => Some(LinkType::default()),
@@ -434,8 +375,8 @@ impl Anime {
                     },
                     color: external_link["color"]
                         .as_str()
-                        .map(|hex| Color::Hex(hex.to_string())),
-                    icon: external_link["icon"].as_str().map(|url| url.to_string()),
+                        .map(|hex| Color::Hex(hex.to_owned())),
+                    icon: external_link["icon"].as_str().map(|url| url.to_owned()),
                     ..Default::default()
                 })
             }
@@ -444,29 +385,35 @@ impl Anime {
         }
 
         if let Some(streaming_episodes_array) = data["streamingEpisodes"].as_array() {
-            let mut streaming_episodes: Vec<Link> =
-                Vec::with_capacity(streaming_episodes_array.len());
-
-            for streaming_episode in streaming_episodes_array {
-                streaming_episodes.push(Link {
-                    title: Some(streaming_episode["title"].as_str().unwrap().to_string()),
-                    thumbnail: Some(streaming_episode["thumbnail"].as_str().unwrap().to_string()),
-                    url: streaming_episode["url"].as_str().unwrap().to_string(),
-                    site: streaming_episode["site"].as_str().unwrap().to_string(),
+            let streaming_episodes: Vec<Link> = streaming_episodes_array
+                .iter()
+                .map(|streaming_episode| Link {
+                    title: streaming_episode["title"].as_str().map(|s| s.to_owned()),
+                    thumbnail: streaming_episode["thumbnail"]
+                        .as_str()
+                        .map(|s| s.to_owned()),
+                    url: streaming_episode["url"]
+                        .as_str()
+                        .unwrap_or_default()
+                        .to_owned(),
+                    site: streaming_episode["site"]
+                        .as_str()
+                        .unwrap_or_default()
+                        .to_owned(),
                     ..Default::default()
                 })
-            }
+                .collect();
 
             anime.streaming_episodes = Some(streaming_episodes);
         }
 
-        anime.url = data["siteUrl"].as_str().unwrap().to_string();
+        anime.url = data["siteUrl"].as_str().unwrap_or_default().to_owned();
 
         anime
     }
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AiringEpisode {
     id: i64,
     at: i64,

@@ -17,12 +17,6 @@ impl fmt::Display for GenericError {
 }
 
 #[derive(Debug)]
-pub enum Error {
-    InvalidId,
-    InvalidMediaType,
-}
-
-#[derive(Debug)]
 struct InvalidId;
 
 impl StdError for InvalidId {}

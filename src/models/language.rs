@@ -2,7 +2,9 @@
 //
 // Copyright (c) 2022 Andriel Ferreira <https://github.com/AndrielFR>
 
-#[derive(Debug, Clone, PartialEq, Default)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub enum Language {
     #[default]
     Japanese,

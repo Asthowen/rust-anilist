@@ -1,26 +1,27 @@
-mod anime;
-mod character;
-mod color;
-mod cover;
-mod date;
-mod format;
-mod gender;
-mod image;
-mod language;
-mod link;
-mod manga;
-mod name;
-mod notification;
-mod person;
-mod relation;
-mod score;
-mod season;
-mod source;
-mod status;
-mod studio;
-mod tag;
-mod title;
-mod user;
+pub mod anime;
+pub mod character;
+pub mod color;
+pub mod cover;
+pub mod date;
+pub mod format;
+pub mod gender;
+pub mod image;
+pub mod language;
+pub mod link;
+pub mod manga;
+pub mod name;
+pub mod notification;
+mod occupations;
+pub mod person;
+pub mod relation;
+pub mod score;
+pub mod season;
+pub mod source;
+pub mod status;
+pub mod studio;
+pub mod tag;
+pub mod title;
+pub mod user;
 
 pub use anime::Anime;
 pub use character::{Character, Role as CharacterRole};
@@ -39,6 +40,7 @@ pub use person::Person;
 pub use relation::{Relation, Type as RelationType};
 pub use score::{Format as ScoreFormat, Score};
 pub use season::Season;
+use serde::{Deserialize, Serialize};
 pub use source::Source;
 pub use status::Status;
 pub use studio::Studio;
@@ -46,7 +48,7 @@ pub use tag::Tag;
 pub use title::Title;
 pub use user::User;
 
-#[derive(Debug, Copy, Clone, PartialEq, Default)]
+#[derive(Debug, Copy, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub enum MediaType {
     Anime,
     Manga,

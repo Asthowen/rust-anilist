@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022 Andriel Ferreira <https://github.com/AndrielFR>
 
-#[derive(Debug, Default, Clone, PartialEq)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Title {
     pub romaji: Option<String>,
     pub english: Option<String>,

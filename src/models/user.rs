@@ -12,8 +12,9 @@ use crate::models::Person;
 use crate::models::Status;
 use crate::models::Studio;
 use crate::models::{Score, ScoreFormat};
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Default, Clone, PartialEq)]
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct User {
     id: i32,
     name: String,
@@ -29,7 +30,7 @@ pub struct User {
     statistics: UserStatisticTypes,
 }
 
-#[derive(Debug, Default, Clone, PartialEq)]
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 struct Options {
     title_language: UserTitleLanguage,
     display_adult_content: bool,
@@ -43,7 +44,7 @@ struct Options {
     disabled_list_activity: Vec<ListActivityOption>,
 }
 
-#[derive(Debug, Clone, PartialEq, Default)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub enum UserTitleLanguage {
     #[default]
     Romaji,
@@ -54,7 +55,7 @@ pub enum UserTitleLanguage {
     NativeStylised,
 }
 
-#[derive(Debug, Clone, PartialEq, Default)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub enum UserStaffNameLanguage {
     RomajiWestern,
     #[default]
@@ -62,13 +63,13 @@ pub enum UserStaffNameLanguage {
     Native,
 }
 
-#[derive(Debug, Default, Clone, PartialEq)]
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ListActivityOption {
     status: Status,
     disabled: bool,
 }
 
-#[derive(Debug, Default, Clone, PartialEq)]
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MediaListOptions {
     score_format: ScoreFormat,
     row_order: String,
@@ -76,7 +77,7 @@ pub struct MediaListOptions {
     manga_list: MediaListTypeOptions,
 }
 
-#[derive(Debug, Default, Clone, PartialEq)]
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MediaListTypeOptions {
     section_order: Vec<String>,
     split_completed_section_by_format: bool,
@@ -85,7 +86,7 @@ pub struct MediaListTypeOptions {
     advanced_scoring_enabled: bool,
 }
 
-#[derive(Debug, Default, Clone, PartialEq)]
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Favourites {
     anime: Vec<Anime>,
     manga: Vec<Manga>,
@@ -94,13 +95,13 @@ pub struct Favourites {
     studios: Vec<Studio>,
 }
 
-#[derive(Debug, Default, Clone, PartialEq)]
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UserStatisticTypes {
     anime: UserStatistics,
     manga: UserStatistics,
 }
 
-#[derive(Debug, Default, Clone, PartialEq)]
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UserStatistics {
     count: i32,
     score: Score,
@@ -113,7 +114,7 @@ pub struct UserStatistics {
     statuses: Vec<UserStatusStatistic>,
 }
 
-#[derive(Debug, Default, Clone, PartialEq)]
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UserFormatStatistic {
     count: i32,
     score: Score,
@@ -123,7 +124,7 @@ pub struct UserFormatStatistic {
     format: Format,
 }
 
-#[derive(Debug, Default, Clone, PartialEq)]
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UserStatusStatistic {
     count: i32,
     score: Score,

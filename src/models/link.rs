@@ -3,8 +3,9 @@
 
 use crate::models::Color;
 use crate::models::Language;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Default, Clone, PartialEq)]
+#[derive(Debug, Default, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Link {
     pub id: Option<i64>,
     pub title: Option<String>,
@@ -18,7 +19,7 @@ pub struct Link {
     pub icon: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Default)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub enum Type {
     #[default]
     Info,
