@@ -144,7 +144,10 @@ impl Person {
         person.blood_type = data["bloodType"].as_str().map(String::from);
         person.is_favourite = data["isFavourite"].as_bool();
         person.is_favourite_blocked = data["isFavouriteBlocked"].as_bool();
-        person.url = data["siteUrl"].as_str().unwrap_or_default().to_owned();
+        data["siteUrl"]
+            .as_str()
+            .unwrap_or_default()
+            .clone_into(&mut person.url);
 
         if let Some(characters) = data["characters"]
             .as_object()

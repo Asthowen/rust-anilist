@@ -23,13 +23,13 @@ impl<'a> AniListClientBuilder<'a> {
     }
 
     pub fn with_reqwest_client(mut self, reqwest_client: reqwest::Client) -> Self {
-        self.reqwest_client = Option::from(reqwest_client);
+        self.reqwest_client = Some(reqwest_client);
 
         self
     }
 
     pub fn with_initialized_reqwest_client(mut self) -> Self {
-        self.reqwest_client = Option::from(reqwest::Client::new());
+        self.reqwest_client = Some(reqwest::Client::new());
 
         self
     }

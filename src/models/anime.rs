@@ -407,7 +407,10 @@ impl Anime {
             anime.streaming_episodes = Some(streaming_episodes);
         }
 
-        anime.url = data["siteUrl"].as_str().unwrap_or_default().to_owned();
+        data["siteUrl"]
+            .as_str()
+            .unwrap_or_default()
+            .clone_into(&mut anime.url);
 
         anime
     }

@@ -1,4 +1,3 @@
-use std::error::Error as StdError;
 use std::fmt;
 
 #[derive(Debug)]
@@ -13,27 +12,5 @@ impl From<reqwest::Error> for GenericError {
 impl fmt::Display for GenericError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.0)
-    }
-}
-
-#[derive(Debug)]
-struct InvalidId;
-
-impl StdError for InvalidId {}
-
-impl fmt::Display for InvalidId {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "The given id is invalid")
-    }
-}
-
-#[derive(Debug)]
-struct InvalidMediaType;
-
-impl StdError for InvalidMediaType {}
-
-impl fmt::Display for InvalidMediaType {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "The given media type is invalid")
     }
 }

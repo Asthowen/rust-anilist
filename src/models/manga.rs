@@ -99,7 +99,10 @@ impl Manga {
             _ => Status::default(),
         };
 
-        manga.description = data["description"].as_str().unwrap_or_default().to_owned();
+        data["description"]
+            .as_str()
+            .unwrap_or_default()
+            .clone_into(&mut manga.description);
 
         if let Some(start_date) = data["startDate"].as_object() {
             let date = Date {
@@ -351,7 +354,10 @@ impl Manga {
             manga.external_links = Some(external_links);
         }
 
-        manga.url = data["siteUrl"].as_str().unwrap_or_default().to_owned();
+        data["siteUrl"]
+            .as_str()
+            .unwrap_or_default()
+            .clone_into(&mut manga.url);
 
         manga
     }

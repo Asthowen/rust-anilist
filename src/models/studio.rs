@@ -18,9 +18,15 @@ impl Studio {
         let mut studio = studio.unwrap_or_default();
 
         studio.id = data["id"].as_i64().unwrap_or_default();
-        studio.name = data["name"].as_str().unwrap_or_default().to_owned();
+        data["name"]
+            .as_str()
+            .unwrap_or_default()
+            .clone_into(&mut studio.name);
         studio.is_animation_studio = data["isAnimationStudio"].as_bool().unwrap_or_default();
-        studio.url = data["siteUrl"].as_str().unwrap_or_default().to_owned();
+        data["siteUrl"]
+            .as_str()
+            .unwrap_or_default()
+            .clone_into(&mut studio.url);
         studio.is_favourite = data["isFavourite"].as_bool();
         studio.favourites = data["favourites"].as_i64().unwrap_or_default();
 
