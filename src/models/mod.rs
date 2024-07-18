@@ -11,7 +11,7 @@ pub mod link;
 pub mod manga;
 pub mod name;
 pub mod notification;
-mod occupations;
+pub mod occupations;
 pub mod person;
 pub mod relation;
 pub mod score;

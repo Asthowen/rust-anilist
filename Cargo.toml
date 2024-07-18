@@ -1,6 +1,6 @@
 [package]
 name = "anilist"
-version = "0.0.3"
+version = "0.0.4"
 authors = ["Asthowen<contact@asthowen.fr>"]
 edition = "2021"
 description = "rust-anilist is a Rust client wrapper for AniList website."
