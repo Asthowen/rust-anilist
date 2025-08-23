@@ -10,11 +10,11 @@ impl StaffImageField {
     }
 }
 
-impl From<StaffImageField> for &'static str {
+impl From<StaffImageField> for String {
     fn from(value: StaffImageField) -> Self {
         match value {
-            StaffImageField::Large => "large",
-            StaffImageField::Medium => "medium",
+            StaffImageField::Large => "large".to_owned(),
+            StaffImageField::Medium => "medium".to_owned(),
         }
     }
 }

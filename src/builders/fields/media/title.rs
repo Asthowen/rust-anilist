@@ -17,13 +17,13 @@ impl MediaTitleField {
     }
 }
 
-impl From<MediaTitleField> for &'static str {
+impl From<MediaTitleField> for String {
     fn from(value: MediaTitleField) -> Self {
         match value {
-            MediaTitleField::Romaji => "romaji",
-            MediaTitleField::English => "english",
-            MediaTitleField::Native => "native",
-            MediaTitleField::UserPreferred => "userPreferred",
+            MediaTitleField::Romaji => "romaji".to_owned(),
+            MediaTitleField::English => "english".to_owned(),
+            MediaTitleField::Native => "native".to_owned(),
+            MediaTitleField::UserPreferred => "userPreferred".to_owned(),
         }
     }
 }

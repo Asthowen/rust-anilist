@@ -10,11 +10,11 @@ impl CharacterImageField {
     }
 }
 
-impl From<CharacterImageField> for &'static str {
+impl From<CharacterImageField> for String {
     fn from(value: CharacterImageField) -> Self {
         match value {
-            CharacterImageField::Large => "large",
-            CharacterImageField::Medium => "medium",
+            CharacterImageField::Large => "large".to_owned(),
+            CharacterImageField::Medium => "medium".to_owned(),
         }
     }
 }

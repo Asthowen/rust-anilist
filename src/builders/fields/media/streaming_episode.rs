@@ -17,13 +17,13 @@ impl MediaStreamingEpisodesField {
     }
 }
 
-impl From<MediaStreamingEpisodesField> for &'static str {
+impl From<MediaStreamingEpisodesField> for String {
     fn from(value: MediaStreamingEpisodesField) -> Self {
         match value {
-            MediaStreamingEpisodesField::Title => "title",
-            MediaStreamingEpisodesField::Thumbnail => "thumbnail",
-            MediaStreamingEpisodesField::Url => "url",
-            MediaStreamingEpisodesField::Site => "site",
+            MediaStreamingEpisodesField::Title => "title".to_owned(),
+            MediaStreamingEpisodesField::Thumbnail => "thumbnail".to_owned(),
+            MediaStreamingEpisodesField::Url => "url".to_owned(),
+            MediaStreamingEpisodesField::Site => "site".to_owned(),
         }
     }
 }

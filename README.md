@@ -10,7 +10,7 @@
         </a>
     </p>
     <h3>
-        <strong>rust-anilist is a Rust client wrapper for AniList website.</strong>
+        <strong>rust-anilist is a Rust client wrapper for AniList API.</strong>
     </h3>
 </div>
 

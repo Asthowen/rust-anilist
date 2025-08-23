@@ -23,16 +23,16 @@ impl StaffNameField {
     }
 }
 
-impl From<StaffNameField> for &'static str {
+impl From<StaffNameField> for String {
     fn from(value: StaffNameField) -> Self {
         match value {
-            StaffNameField::First => "first",
-            StaffNameField::Middle => "middle",
-            StaffNameField::Last => "last",
-            StaffNameField::Full => "full",
-            StaffNameField::Native => "native",
-            StaffNameField::Alternative => "alternative",
-            StaffNameField::UserPreferred => "userPreferred",
+            StaffNameField::First => "first".to_owned(),
+            StaffNameField::Middle => "middle".to_owned(),
+            StaffNameField::Last => "last".to_owned(),
+            StaffNameField::Full => "full".to_owned(),
+            StaffNameField::Native => "native".to_owned(),
+            StaffNameField::Alternative => "alternative".to_owned(),
+            StaffNameField::UserPreferred => "userPreferred".to_owned(),
         }
     }
 }

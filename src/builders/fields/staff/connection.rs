@@ -1,4 +1,4 @@
-use crate::builders::fields::{PageInfoField, StaffEdgeField};
+use crate::builders::fields::{JoinFields, PageInfoField, StaffEdgeField};
 
 #[derive(Copy, Clone)]
 pub enum StaffConnectionField<'a> {
@@ -19,22 +19,10 @@ impl StaffConnectionField<'_> {
 impl From<StaffConnectionField<'_>> for String {
     fn from(value: StaffConnectionField) -> Self {
         match value {
-            StaffConnectionField::Edges(fields) => format!(
-                "edges {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<String>>()
-                    .join(" ")
-            ),
-            StaffConnectionField::PageInfo(fields) => format!(
-                "pageInfo {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<&str>>()
-                    .join(" ")
-            ),
+            StaffConnectionField::Edges(fields) => format!("edges {{ {} }}", fields.join_fields()),
+            StaffConnectionField::PageInfo(fields) => {
+                format!("pageInfo {{ {} }}", fields.join_fields())
+            }
         }
     }
 }

@@ -3,8 +3,9 @@ pub(crate) mod edge;
 pub(crate) mod image;
 pub(crate) mod name;
 
-use crate::builders::fields::media::connection::MediaConnectionField;
-use crate::builders::fields::{CharacterImageField, CharacterNameField};
+use crate::builders::fields::{
+    CharacterImageField, CharacterNameField, JoinFields, MediaConnectionField,
+};
 
 #[derive(Copy, Clone)]
 pub enum CharacterField<'a> {
@@ -51,22 +52,8 @@ impl From<CharacterField<'_>> for String {
     fn from(value: CharacterField) -> Self {
         match value {
             CharacterField::Id => "id".to_owned(),
-            CharacterField::Name(fields) => format!(
-                "name {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<&str>>()
-                    .join(" ")
-            ),
-            CharacterField::Image(fields) => format!(
-                "image {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<&str>>()
-                    .join(" ")
-            ),
+            CharacterField::Name(fields) => format!("name {{ {} }}", fields.join_fields()),
+            CharacterField::Image(fields) => format!("image {{ {} }}", fields.join_fields()),
             CharacterField::Description => "description".to_owned(),
             CharacterField::Gender => "gender".to_owned(),
             CharacterField::DateOfBirth => "dateOfBirth { year month day }".to_owned(),
@@ -75,14 +62,7 @@ impl From<CharacterField<'_>> for String {
             CharacterField::IsFavourite => "isFavourite".to_owned(),
             CharacterField::IsFavouriteBlocked => "isFavouriteBlocked".to_owned(),
             CharacterField::SiteUrl => "siteUrl".to_owned(),
-            CharacterField::Media(fields) => format!(
-                "media {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<String>>()
-                    .join(" ")
-            ),
+            CharacterField::Media(fields) => format!("media {{ {} }}", fields.join_fields()),
             CharacterField::Favourites => "favourites".to_owned(),
             CharacterField::ModNotes => "modNotes".to_owned(),
         }

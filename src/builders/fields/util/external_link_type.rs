@@ -25,17 +25,17 @@ impl ExternalLinksField {
     }
 }
 
-impl From<ExternalLinksField> for &'static str {
+impl From<ExternalLinksField> for String {
     fn from(value: ExternalLinksField) -> Self {
         match value {
-            ExternalLinksField::Id => "id",
-            ExternalLinksField::Url => "url",
-            ExternalLinksField::Site => "site",
-            ExternalLinksField::SiteId => "siteId",
-            ExternalLinksField::Type => "type",
-            ExternalLinksField::Language => "language",
-            ExternalLinksField::Color => "color",
-            ExternalLinksField::Icon => "icon",
+            ExternalLinksField::Id => "id".to_owned(),
+            ExternalLinksField::Url => "url".to_owned(),
+            ExternalLinksField::Site => "site".to_owned(),
+            ExternalLinksField::SiteId => "siteId".to_owned(),
+            ExternalLinksField::Type => "type".to_owned(),
+            ExternalLinksField::Language => "language".to_owned(),
+            ExternalLinksField::Color => "color".to_owned(),
+            ExternalLinksField::Icon => "icon".to_owned(),
         }
     }
 }

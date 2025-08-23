@@ -1,4 +1,4 @@
-use crate::builders::fields::{MediaField, StaffField, StaffRoleTypeField};
+use crate::builders::fields::{JoinFields, MediaField, StaffField, StaffRoleTypeField};
 
 #[derive(Copy, Clone)]
 pub enum CharacterEdgeField<'a> {
@@ -44,30 +44,13 @@ impl From<CharacterEdgeField<'_>> for String {
             CharacterEdgeField::Id => "id".to_owned(),
             CharacterEdgeField::Role => "role".to_owned(),
             CharacterEdgeField::Name => "name".to_owned(),
-            CharacterEdgeField::VoiceActors(fields) => format!(
-                "voiceActors {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<String>>()
-                    .join(" ")
-            ),
-            CharacterEdgeField::VoiceActorRoles(fields) => format!(
-                "voiceActorRoles {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<String>>()
-                    .join(" ")
-            ),
-            CharacterEdgeField::Media(fields) => format!(
-                "media {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<String>>()
-                    .join(" ")
-            ),
+            CharacterEdgeField::VoiceActors(fields) => {
+                format!("voiceActors {{ {} }}", fields.join_fields())
+            }
+            CharacterEdgeField::VoiceActorRoles(fields) => {
+                format!("voiceActorRoles {{ {} }}", fields.join_fields())
+            }
+            CharacterEdgeField::Media(fields) => format!("media {{ {} }}", fields.join_fields()),
             CharacterEdgeField::FavouriteOrder => "favouriteOrder".to_owned(),
         }
     }

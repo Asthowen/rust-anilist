@@ -1,4 +1,4 @@
-use crate::builders::fields::{CharacterEdgeField, PageInfoField};
+use crate::builders::fields::{CharacterEdgeField, JoinFields, PageInfoField};
 
 #[derive(Copy, Clone)]
 pub enum CharacterConnectionField<'a> {
@@ -19,22 +19,12 @@ impl CharacterConnectionField<'_> {
 impl From<CharacterConnectionField<'_>> for String {
     fn from(value: CharacterConnectionField) -> Self {
         match value {
-            CharacterConnectionField::Edges(fields) => format!(
-                "edges {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<String>>()
-                    .join(" ")
-            ),
-            CharacterConnectionField::PageInfo(fields) => format!(
-                "pageInfo {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<&str>>()
-                    .join(" ")
-            ),
+            CharacterConnectionField::Edges(fields) => {
+                format!("edges {{ {} }}", fields.join_fields())
+            }
+            CharacterConnectionField::PageInfo(fields) => {
+                format!("pageInfo {{ {} }}", fields.join_fields())
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-use crate::builders::fields::StaffField;
+use crate::builders::fields::{JoinFields, StaffField};
 
 #[derive(Copy, Clone)]
 pub enum StaffRoleTypeField<'a> {
@@ -22,14 +22,9 @@ impl StaffRoleTypeField<'_> {
 impl From<StaffRoleTypeField<'_>> for String {
     fn from(value: StaffRoleTypeField) -> Self {
         match value {
-            StaffRoleTypeField::VoiceActor(fields) => format!(
-                "voiceActor {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<String>>()
-                    .join(" ")
-            ),
+            StaffRoleTypeField::VoiceActor(fields) => {
+                format!("voiceActor {{ {} }}", fields.join_fields())
+            }
             StaffRoleTypeField::RoleNotes => "roleNotes".to_owned(),
             StaffRoleTypeField::DubGroup => "dubGroup".to_owned(),
         }

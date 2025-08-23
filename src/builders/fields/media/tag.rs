@@ -27,18 +27,18 @@ impl MediaTagField {
     }
 }
 
-impl From<MediaTagField> for &'static str {
+impl From<MediaTagField> for String {
     fn from(value: MediaTagField) -> Self {
         match value {
-            MediaTagField::Id => "id",
-            MediaTagField::Name => "name",
-            MediaTagField::Description => "description",
-            MediaTagField::Category => "category",
-            MediaTagField::Rank => "rank",
-            MediaTagField::IsGeneralSpoiler => "isGeneralSpoiler",
-            MediaTagField::IsMediaSpoiler => "isMediaSpoiler",
-            MediaTagField::IsAdult => "isAdult",
-            MediaTagField::UserId => "userId",
+            MediaTagField::Id => "id".to_owned(),
+            MediaTagField::Name => "name".to_owned(),
+            MediaTagField::Description => "description".to_owned(),
+            MediaTagField::Category => "category".to_owned(),
+            MediaTagField::Rank => "rank".to_owned(),
+            MediaTagField::IsGeneralSpoiler => "isGeneralSpoiler".to_owned(),
+            MediaTagField::IsMediaSpoiler => "isMediaSpoiler".to_owned(),
+            MediaTagField::IsAdult => "isAdult".to_owned(),
+            MediaTagField::UserId => "userId".to_owned(),
         }
     }
 }

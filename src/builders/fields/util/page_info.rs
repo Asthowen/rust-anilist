@@ -19,14 +19,14 @@ impl PageInfoField {
     }
 }
 
-impl From<PageInfoField> for &'static str {
+impl From<PageInfoField> for String {
     fn from(value: PageInfoField) -> Self {
         match value {
-            PageInfoField::Total => "total",
-            PageInfoField::PerPage => "perPage",
-            PageInfoField::CurrentPage => "currentPage",
-            PageInfoField::LastPage => "lastPage",
-            PageInfoField::HasNextPage => "hasNextPage",
+            PageInfoField::Total => "total".to_owned(),
+            PageInfoField::PerPage => "perPage".to_owned(),
+            PageInfoField::CurrentPage => "currentPage".to_owned(),
+            PageInfoField::LastPage => "lastPage".to_owned(),
+            PageInfoField::HasNextPage => "hasNextPage".to_owned(),
         }
     }
 }

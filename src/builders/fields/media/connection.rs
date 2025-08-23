@@ -1,5 +1,4 @@
-use crate::builders::fields::PageInfoField;
-use crate::builders::fields::media::edge::MediaEdgeField;
+use crate::builders::fields::{JoinFields, MediaEdgeField, PageInfoField};
 
 #[derive(Copy, Clone)]
 pub enum MediaConnectionField<'a> {
@@ -20,22 +19,10 @@ impl MediaConnectionField<'_> {
 impl From<MediaConnectionField<'_>> for String {
     fn from(value: MediaConnectionField) -> Self {
         match value {
-            MediaConnectionField::Edges(fields) => format!(
-                "edges {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<String>>()
-                    .join(" ")
-            ),
-            MediaConnectionField::PageInfo(fields) => format!(
-                "pageInfo {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<&str>>()
-                    .join(" ")
-            ),
+            MediaConnectionField::Edges(fields) => format!("edges {{ {} }}", fields.join_fields()),
+            MediaConnectionField::PageInfo(fields) => {
+                format!("pageInfo {{ {} }}", fields.join_fields())
+            }
         }
     }
 }

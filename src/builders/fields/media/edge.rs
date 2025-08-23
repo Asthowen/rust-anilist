@@ -1,4 +1,4 @@
-use crate::builders::fields::{CharacterField, StaffField, StaffRoleTypeField};
+use crate::builders::fields::{CharacterField, JoinFields, StaffField, StaffRoleTypeField};
 
 #[derive(Copy, Clone)]
 pub enum MediaEdgeField<'a> {
@@ -41,35 +41,20 @@ impl From<MediaEdgeField<'_>> for String {
             MediaEdgeField::Id => "id".to_owned(),
             MediaEdgeField::RelationType => "relationType".to_owned(),
             MediaEdgeField::IsMainStudio => "isMainStudio".to_owned(),
-            MediaEdgeField::Characters(fields) => format!(
-                "characters {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<String>>()
-                    .join(" ")
-            ),
+            MediaEdgeField::Characters(fields) => {
+                format!("characters {{ {} }}", fields.join_fields())
+            }
             MediaEdgeField::CharacterRole => "characterRole".to_owned(),
             MediaEdgeField::CharacterName => "characterName".to_owned(),
             MediaEdgeField::RoleNotes => "roleNotes".to_owned(),
             MediaEdgeField::DubGroup => "dubGroup".to_owned(),
             MediaEdgeField::StaffRole => "staffRole".to_owned(),
-            MediaEdgeField::VoiceActors(fields) => format!(
-                "voiceActors {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<String>>()
-                    .join(" ")
-            ),
-            MediaEdgeField::VoiceActorRoles(fields) => format!(
-                "voiceActorRoles {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<String>>()
-                    .join(" ")
-            ),
+            MediaEdgeField::VoiceActors(fields) => {
+                format!("voiceActors {{ {} }}", fields.join_fields())
+            }
+            MediaEdgeField::VoiceActorRoles(fields) => {
+                format!("voiceActorRoles {{ {} }}", fields.join_fields())
+            }
             MediaEdgeField::FavouriteOrder => "favouriteOrder".to_owned(),
         }
     }

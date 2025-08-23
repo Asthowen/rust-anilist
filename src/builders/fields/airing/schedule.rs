@@ -19,14 +19,14 @@ impl AiringScheduleField {
     }
 }
 
-impl From<AiringScheduleField> for &'static str {
+impl From<AiringScheduleField> for String {
     fn from(value: AiringScheduleField) -> Self {
         match value {
-            AiringScheduleField::Id => "id",
-            AiringScheduleField::AiringAt => "airingAt",
-            AiringScheduleField::TimeUntilAiring => "timeUntilAiring",
-            AiringScheduleField::Episode => "episode",
-            AiringScheduleField::MediaId => "mediaId",
+            AiringScheduleField::Id => "id".to_owned(),
+            AiringScheduleField::AiringAt => "airingAt".to_owned(),
+            AiringScheduleField::TimeUntilAiring => "timeUntilAiring".to_owned(),
+            AiringScheduleField::Episode => "episode".to_owned(),
+            AiringScheduleField::MediaId => "mediaId".to_owned(),
         }
     }
 }

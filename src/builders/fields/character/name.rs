@@ -23,16 +23,16 @@ impl CharacterNameField {
     }
 }
 
-impl From<CharacterNameField> for &'static str {
+impl From<CharacterNameField> for String {
     fn from(value: CharacterNameField) -> Self {
         match value {
-            CharacterNameField::First => "first",
-            CharacterNameField::Middle => "middle",
-            CharacterNameField::Last => "last",
-            CharacterNameField::Full => "full",
-            CharacterNameField::Native => "native",
-            CharacterNameField::Alternative => "alternative",
-            CharacterNameField::UserPreferred => "user_preferred",
+            CharacterNameField::First => "first".to_owned(),
+            CharacterNameField::Middle => "middle".to_owned(),
+            CharacterNameField::Last => "last".to_owned(),
+            CharacterNameField::Full => "full".to_owned(),
+            CharacterNameField::Native => "native".to_owned(),
+            CharacterNameField::Alternative => "alternative".to_owned(),
+            CharacterNameField::UserPreferred => "user_preferred".to_owned(),
         }
     }
 }

@@ -7,12 +7,10 @@ pub(crate) mod tag;
 pub(crate) mod title;
 pub(crate) mod trailer;
 
-use crate::builders::fields::airing::schedule::AiringScheduleField;
-use crate::builders::fields::media::connection::MediaConnectionField;
-use crate::builders::fields::media::streaming_episode::MediaStreamingEpisodesField;
 use crate::builders::fields::{
-    CharacterConnectionField, CharacterEdgeField, ExternalLinksField, MediaCoverImageField,
-    MediaRankField, MediaTagField, MediaTitleField, MediaTrailerField, PageInfoField,
+    AiringScheduleField, CharacterConnectionField, CharacterEdgeField, ExternalLinksField,
+    JoinFields, MediaConnectionField, MediaCoverImageField, MediaRankField,
+    MediaStreamingEpisodesField, MediaTagField, MediaTitleField, MediaTrailerField, PageInfoField,
     StaffConnectionField,
 };
 
@@ -133,14 +131,7 @@ impl From<MediaField<'_>> for String {
         match value {
             MediaField::Id => "id".to_owned(),
             MediaField::IdMal => "idMal".to_owned(),
-            MediaField::Title(fields) => format!(
-                "title {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<&str>>()
-                    .join(" ")
-            ),
+            MediaField::Title(fields) => format!("title {{ {} }}", fields.join_fields()),
             MediaField::Type => "type".to_owned(),
             MediaField::Format => "format".to_owned(),
             MediaField::Status => "status(version: 2)".to_owned(),
@@ -158,23 +149,9 @@ impl From<MediaField<'_>> for String {
             MediaField::IsLicensed => "isLicensed".to_owned(),
             MediaField::Source => "source(version: 3)".to_owned(),
             MediaField::Hashtag => "hashtag".to_owned(),
-            MediaField::Trailer(fields) => format!(
-                "trailer {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<&str>>()
-                    .join(" ")
-            ),
+            MediaField::Trailer(fields) => format!("trailer {{ {} }}", fields.join_fields()),
             MediaField::UpdatedAt => "updatedAt".to_owned(),
-            MediaField::CoverImage(fields) => format!(
-                "coverImage {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<&str>>()
-                    .join(" ")
-            ),
+            MediaField::CoverImage(fields) => format!("coverImage {{ {} }}", fields.join_fields()),
             MediaField::BannerImage => "bannerImage".to_owned(),
             MediaField::Genres => "genres".to_owned(),
             MediaField::Synonyms => "synonyms".to_owned(),
@@ -184,73 +161,23 @@ impl From<MediaField<'_>> for String {
             MediaField::IsLocked => "isLocked".to_owned(),
             MediaField::Trending => "trending".to_owned(),
             MediaField::Favourites => "favourites".to_owned(),
-            MediaField::Tags(fields) => format!(
-                "tags {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<&str>>()
-                    .join(" ")
-            ),
-            MediaField::Relations(fields) => format!(
-                "relations {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<String>>()
-                    .join(" ")
-            ),
-            MediaField::Characters(fields) => format!(
-                "characters {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<String>>()
-                    .join(" ")
-            ),
-            MediaField::Staff(fields) => format!(
-                "staff {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<String>>()
-                    .join(" ")
-            ),
+            MediaField::Tags(fields) => format!("tags {{ {} }}", fields.join_fields()),
+            MediaField::Relations(fields) => format!("relations {{ {} }}", fields.join_fields()),
+            MediaField::Characters(fields) => format!("characters {{ {} }}", fields.join_fields()),
+            MediaField::Staff(fields) => format!("staff {{ {} }}", fields.join_fields()),
             MediaField::IsFavourite => "isFavourite".to_owned(),
             MediaField::IsFavouriteBlocked => "isFavouriteBlocked".to_owned(),
             MediaField::IsAdult => "isAdult".to_owned(),
-            MediaField::NextAiringEpisode(fields) => format!(
-                "nextAiringEpisode {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<&str>>()
-                    .join(" ")
-            ),
-            MediaField::ExternalLinks(fields) => format!(
-                "externalLinks {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<&str>>()
-                    .join(" ")
-            ),
-            MediaField::StreamingEpisodes(fields) => format!(
-                "streamingEpisodes {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<&str>>()
-                    .join(" ")
-            ),
-            MediaField::Rankings(fields) => format!(
-                "rankings {{ {} }}",
-                fields
-                    .iter()
-                    .map(|&field| field.into())
-                    .collect::<Vec<&str>>()
-                    .join(" ")
-            ),
+            MediaField::NextAiringEpisode(fields) => {
+                format!("nextAiringEpisode {{ {} }}", fields.join_fields())
+            }
+            MediaField::ExternalLinks(fields) => {
+                format!("externalLinks {{ {} }}", fields.join_fields())
+            }
+            MediaField::StreamingEpisodes(fields) => {
+                format!("streamingEpisodes {{ {} }}", fields.join_fields())
+            }
+            MediaField::Rankings(fields) => format!("rankings {{ {} }}", fields.join_fields()),
             MediaField::SiteUrl => "siteUrl".to_owned(),
             MediaField::AutoCreateForumThread => "autoCreateForumThread".to_owned(),
             MediaField::IsRecommendationBlocked => "isRecommendationBlocked".to_owned(),

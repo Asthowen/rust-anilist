@@ -15,12 +15,12 @@ impl MediaTrailerField {
     }
 }
 
-impl From<MediaTrailerField> for &'static str {
+impl From<MediaTrailerField> for String {
     fn from(value: MediaTrailerField) -> Self {
         match value {
-            MediaTrailerField::Id => "id",
-            MediaTrailerField::Site => "site",
-            MediaTrailerField::Thumbnail => "thumbnail",
+            MediaTrailerField::Id => "id".to_owned(),
+            MediaTrailerField::Site => "site".to_owned(),
+            MediaTrailerField::Thumbnail => "thumbnail".to_owned(),
         }
     }
 }

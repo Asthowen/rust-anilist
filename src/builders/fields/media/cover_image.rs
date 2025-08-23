@@ -17,13 +17,13 @@ impl MediaCoverImageField {
     }
 }
 
-impl From<MediaCoverImageField> for &'static str {
+impl From<MediaCoverImageField> for String {
     fn from(value: MediaCoverImageField) -> Self {
         match value {
-            MediaCoverImageField::ExtraLarge => "extraLarge",
-            MediaCoverImageField::Large => "large",
-            MediaCoverImageField::Medium => "medium",
-            MediaCoverImageField::Color => "color",
+            MediaCoverImageField::ExtraLarge => "extraLarge".to_owned(),
+            MediaCoverImageField::Large => "large".to_owned(),
+            MediaCoverImageField::Medium => "medium".to_owned(),
+            MediaCoverImageField::Color => "color".to_owned(),
         }
     }
 }
