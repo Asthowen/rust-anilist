@@ -11,5 +11,5 @@ pub struct MediaTag {
     pub is_general_spoiler: Option<bool>,
     pub is_media_spoiler: Option<bool>,
     pub is_adult: Option<bool>,
-    pub user_id: Option<i64>,
+    pub user_id: Option<i32>,
 }

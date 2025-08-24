@@ -14,7 +14,7 @@ pub(crate) mod sort;
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Character {
-    pub id: Option<i64>,
+    pub id: Option<i32>,
     pub name: Option<CharacterName>,
     pub image: Option<CharacterImage>,
     pub description: Option<String>,

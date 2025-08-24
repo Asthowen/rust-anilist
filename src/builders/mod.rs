@@ -1,20 +1,27 @@
-use crate::builders::media::MediaQueryBuilder;
-use crate::models::Media;
+use crate::models::{Media, MediaList};
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
 use std::fmt::{Display, Formatter};
 
 pub mod fields;
-pub mod media;
+mod mutations;
+mod parameters_builder;
+mod queries;
+
+pub use mutations::save_media_list_entry::SaveMediaListEntryMutationBuilder;
+pub(crate) use parameters_builder::ParametersBuilder;
+pub use queries::media::MediaQueryBuilder;
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum AniListFragmentType {
     Media,
+    MediaList,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum AniListResponse {
-    Media(Media),
+    Media(Box<Media>),
+    MediaList(Box<MediaList>),
 }
 
 pub struct BuiltQuery {
@@ -43,12 +50,7 @@ impl Display for RootOperationType {
 pub trait QueryBuilder {
     fn build(&self, index: usize) -> BuiltQuery;
     fn root_operation_type(&self) -> RootOperationType;
-
     fn get_fragment_type(&self) -> AniListFragmentType;
-
-    fn get_access_token(&self) -> Option<&str>;
-
-    fn need_auth(&self) -> bool;
 }
 
 impl QueryBuilder for MediaQueryBuilder<'_> {
@@ -63,12 +65,18 @@ impl QueryBuilder for MediaQueryBuilder<'_> {
     fn get_fragment_type(&self) -> AniListFragmentType {
         AniListFragmentType::Media
     }
+}
 
-    fn get_access_token(&self) -> Option<&str> {
-        None
+impl QueryBuilder for SaveMediaListEntryMutationBuilder<'_> {
+    fn build(&self, index: usize) -> BuiltQuery {
+        self.build(index)
     }
 
-    fn need_auth(&self) -> bool {
-        false
+    fn root_operation_type(&self) -> RootOperationType {
+        RootOperationType::Mutation
+    }
+
+    fn get_fragment_type(&self) -> AniListFragmentType {
+        AniListFragmentType::MediaList
     }
 }

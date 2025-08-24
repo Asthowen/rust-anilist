@@ -1,6 +1,6 @@
 use crate::builders::fields::{JoinFields, StaffField};
 
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub enum StaffRoleTypeField<'a> {
     VoiceActor(&'a [StaffField<'a>]),
     RoleNotes,

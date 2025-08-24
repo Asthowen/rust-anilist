@@ -1,4 +1,5 @@
 use crate::client::AniListResponseError;
+use reqwest::StatusCode;
 use std::fmt;
 
 #[derive(Debug)]
@@ -7,7 +8,7 @@ pub enum AniListError {
     UnknownQuery,
     MixedOperationTypes,
     ApiErrors(Vec<AniListResponseError>),
-    UnknownApiError,
+    UnknownApiError(StatusCode),
     HttpRequestError(reqwest::Error),
     InvalidHttpHeader(reqwest::header::InvalidHeaderValue),
 }
@@ -43,7 +44,10 @@ impl fmt::Display for AniListError {
                     if errors.len() < 2 { "" } else { "s" }
                 )
             }
-            Self::UnknownApiError => write!(f, "An unknown AniList API error occurred."),
+            Self::UnknownApiError(code) => write!(
+                f,
+                "An unknown AniList API error occurred (HTTP error code: {code})."
+            ),
             Self::HttpRequestError(error) => write!(f, "HTTP request failed: {error}"),
             Self::InvalidHttpHeader(error) => write!(f, "Invalid HTTP header value: {error}"),
         }

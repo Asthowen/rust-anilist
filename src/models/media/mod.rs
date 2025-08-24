@@ -17,6 +17,8 @@ pub(crate) mod cover_image;
 pub(crate) mod edge;
 pub(crate) mod external_link;
 pub(crate) mod format;
+pub(crate) mod list;
+pub(crate) mod list_status;
 pub(crate) mod mtype;
 pub(crate) mod rank;
 pub(crate) mod rank_type;

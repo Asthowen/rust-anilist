@@ -19,7 +19,7 @@ pub struct AniListResponseError {
     pub message: String,
     #[serde(deserialize_with = "deserialize_status_code")]
     pub status: StatusCode,
-    pub locations: Vec<AniListResponseErrorLocation>,
+    pub locations: Option<Vec<AniListResponseErrorLocation>>,
 }
 
 #[derive(Debug, Clone, Deserialize)]

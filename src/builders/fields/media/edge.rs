@@ -1,6 +1,6 @@
 use crate::builders::fields::{CharacterField, JoinFields, StaffField, StaffRoleTypeField};
 
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub enum MediaEdgeField<'a> {
     Id,
     RelationType,

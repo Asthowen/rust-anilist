@@ -1,6 +1,6 @@
 use crate::builders::fields::{JoinFields, MediaField, StaffField, StaffRoleTypeField};
 
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub enum CharacterEdgeField<'a> {
     Id,
     Role,

@@ -9,7 +9,7 @@ use crate::builders::fields::{
     StaffImageField, StaffNameField,
 };
 
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub enum StaffField<'a> {
     Id,
     Name(&'a [StaffNameField]),
@@ -57,12 +57,7 @@ impl StaffField<'_> {
             StaffField::SiteUrl,
             StaffField::StaffMedia(MediaConnectionField::all()),
             StaffField::Characters(&[
-                CharacterConnectionField::Edges(&[
-                    CharacterEdgeField::Id,
-                    CharacterEdgeField::Role,
-                    CharacterEdgeField::Name,
-                    CharacterEdgeField::FavouriteOrder,
-                ]),
+                CharacterConnectionField::Edges(&[CharacterEdgeField::Id]),
                 CharacterConnectionField::PageInfo(PageInfoField::all()),
             ]),
             StaffField::CharacterMedia(MediaConnectionField::all()),

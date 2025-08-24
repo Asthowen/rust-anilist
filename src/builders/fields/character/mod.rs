@@ -7,7 +7,7 @@ use crate::builders::fields::{
     CharacterImageField, CharacterNameField, JoinFields, MediaConnectionField,
 };
 
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub enum CharacterField<'a> {
     Id,
     Name(&'a [CharacterNameField]),

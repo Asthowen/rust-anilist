@@ -24,7 +24,6 @@ anilist = { git = "https://github.com/Asthowen/rust-anilist", version = "0.1.0" 
 ### Create client
 ```rust
 let anilist_client = AniListClient::builder()
-    .with_anilist_token("some")
     .build()
     .unwrap();
 ```
@@ -32,7 +31,7 @@ let anilist_client = AniListClient::builder()
 ### Retrieving manga from ID `64127`
 ```rust
 anilist_client
-    .send_query(MediaQueryBuilder::new_all_fields().with_id(64127))
+    .send_query(MediaQueryBuilder::new_all_fields().with_id(64127), Some("token"))
     .await?;
 ```
 
@@ -47,6 +46,7 @@ anilist_client
                 MediaField::Tags(&[MediaTagField::Id, MediaTagField::Name]),
             ])
             .with_id(64127),
+        Some("token"),
     )
     .await?;
 ```
@@ -54,10 +54,13 @@ anilist_client
 ### Retrieving manga from IDs `64127` and `139741` in a single request
 ```rust
 anilist_client
-    .send_queries(&[
-        MediaQueryBuilder::new_all_fields().with_id(64127),
-        MediaQueryBuilder::new_all_fields().with_id(139741),
-    ])
+    .send_queries(
+        &[
+            MediaQueryBuilder::new_all_fields().with_id(64127),
+            MediaQueryBuilder::new_all_fields().with_id(139741),
+        ],
+        Some("token"),
+    )
     .await?;
 ```
 

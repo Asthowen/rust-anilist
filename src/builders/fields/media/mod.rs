@@ -1,6 +1,7 @@
 pub(crate) mod connection;
 pub(crate) mod cover_image;
 pub(crate) mod edge;
+pub(crate) mod list;
 pub(crate) mod rank;
 pub(crate) mod streaming_episode;
 pub(crate) mod tag;
@@ -14,7 +15,7 @@ use crate::builders::fields::{
     StaffConnectionField,
 };
 
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub enum MediaField<'a> {
     Id,
     IdMal,
