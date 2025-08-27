@@ -8,6 +8,7 @@ pub enum AniListError {
     UnknownQuery,
     MixedOperationTypes,
     ApiErrors(Vec<AniListResponseError>),
+    ApiRateLimited,
     UnknownApiError(StatusCode),
     HttpRequestError(reqwest::Error),
     JsonParseError(serde_json::Error),
@@ -45,6 +46,10 @@ impl fmt::Display for AniListError {
                     if errors.len() < 2 { "" } else { "s" }
                 )
             }
+            Self::ApiRateLimited => write!(
+                f,
+                "AniList API rate limit has been reached. Please wait before making more requests."
+            ),
             Self::UnknownApiError(code) => write!(
                 f,
                 "An unknown AniList API error occurred (HTTP error code: {code})."

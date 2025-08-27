@@ -12,6 +12,8 @@ use reqwest::header::HeaderValue;
 use serde::de::DeserializeOwned;
 use serde_json::{Map, Value};
 use std::collections::HashSet;
+use std::sync::Arc;
+use std::sync::atomic::{AtomicUsize, Ordering};
 use std::time::Duration;
 
 pub const DEFAULT_TIMEOUT: Duration = Duration::from_secs(20);
@@ -47,6 +49,7 @@ impl AniListClientBuilder {
             reqwest_client,
             timeout: self.timeout.unwrap_or(DEFAULT_TIMEOUT),
             default_headers,
+            rate_limit_remaining: Arc::new(AtomicUsize::new(30)),
         })
     }
 }
@@ -56,6 +59,7 @@ pub struct AniListClient {
     reqwest_client: reqwest::Client,
     timeout: Duration,
     default_headers: HeaderMap,
+    rate_limit_remaining: Arc<AtomicUsize>,
 }
 impl AniListClient {
     pub fn builder() -> AniListClientBuilder {
@@ -138,6 +142,10 @@ impl AniListClient {
         fragments_types: &[AniListFragmentType],
         access_token: Option<&str>,
     ) -> Result<Vec<AniListResponse>, AniListError> {
+        if self.rate_limit_remaining.load(Ordering::Acquire) == 0 {
+            return Err(AniListError::ApiRateLimited);
+        }
+
         let mut request = self
             .reqwest_client
             .post("https://graphql.anilist.co/")
@@ -150,6 +158,16 @@ impl AniListClient {
 
         let response = request.send().await?;
         let status_code = response.status();
+        if let Some(remaining) = response
+            .headers()
+            .get("X-RateLimit-Remaining")
+            .and_then(|header| header.to_str().ok())
+            .and_then(|header| header.parse::<usize>().ok())
+        {
+            self.rate_limit_remaining
+                .store(remaining, Ordering::Release);
+        }
+
         let json: AniListResponseInternal<Map<String, Value>> = response.json().await?;
 
         if let Some(errors) = json.errors {
