@@ -3,9 +3,9 @@ use std::fmt::{Display, Formatter};
 
 #[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
 pub enum MediaType {
-    #[serde(alias = "ANIME")]
+    #[serde(rename = "ANIME")]
     Anime,
-    #[serde(alias = "MANGA")]
+    #[serde(rename = "MANGA")]
     Manga,
 }
 

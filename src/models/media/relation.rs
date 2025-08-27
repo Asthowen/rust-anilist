@@ -2,30 +2,30 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum MediaRelation {
-    #[serde(alias = "ADAPTATION")]
+    #[serde(rename = "ADAPTATION")]
     Adaptation,
-    #[serde(alias = "PREQUEL")]
+    #[serde(rename = "PREQUEL")]
     Prequel,
-    #[serde(alias = "SEQUEL")]
+    #[serde(rename = "SEQUEL")]
     Sequel,
-    #[serde(alias = "PARENT")]
+    #[serde(rename = "PARENT")]
     Parent,
-    #[serde(alias = "SIDE_STORY")]
+    #[serde(rename = "SIDE_STORY")]
     SideStory,
-    #[serde(alias = "CHARACTER")]
+    #[serde(rename = "CHARACTER")]
     Character,
-    #[serde(alias = "SUMMARY")]
+    #[serde(rename = "SUMMARY")]
     Summary,
-    #[serde(alias = "ALTERNATIVE")]
+    #[serde(rename = "ALTERNATIVE")]
     Alternative,
-    #[serde(alias = "SPIN_OFF")]
+    #[serde(rename = "SPIN_OFF")]
     SpinOff,
-    #[serde(alias = "OTHER")]
+    #[serde(rename = "OTHER")]
     Other,
-    #[serde(alias = "SOURCE")]
+    #[serde(rename = "SOURCE")]
     Source,
-    #[serde(alias = "COMPILATION")]
+    #[serde(rename = "COMPILATION")]
     Compilation,
-    #[serde(alias = "CONTAINS")]
+    #[serde(rename = "CONTAINS")]
     Contains,
 }

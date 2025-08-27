@@ -1,7 +1,10 @@
-use crate::builders::fields::{JoinFields, MediaField, StaffField, StaffRoleTypeField};
+use crate::builders::fields::{
+    CharacterField, JoinFields, MediaField, StaffField, StaffRoleTypeField,
+};
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum CharacterEdgeField<'a> {
+    Node(&'a [CharacterField<'a>]),
     Id,
     Role,
     Name,
@@ -14,6 +17,7 @@ pub enum CharacterEdgeField<'a> {
 impl CharacterEdgeField<'_> {
     pub const fn all() -> &'static [CharacterEdgeField<'static>] {
         const ALL: &[CharacterEdgeField<'static>] = &[
+            CharacterEdgeField::Node(&[CharacterField::Id]),
             CharacterEdgeField::Id,
             CharacterEdgeField::Role,
             CharacterEdgeField::Name,
@@ -41,6 +45,9 @@ impl CharacterEdgeField<'_> {
 impl From<CharacterEdgeField<'_>> for String {
     fn from(value: CharacterEdgeField) -> Self {
         match value {
+            CharacterEdgeField::Node(fields) => {
+                format!("node {{ {} }}", fields.join_fields())
+            }
             CharacterEdgeField::Id => "id".to_owned(),
             CharacterEdgeField::Role => "role".to_owned(),
             CharacterEdgeField::Name => "name".to_owned(),

@@ -2,7 +2,7 @@ use crate::builders::fields::{JoinFields, PageInfoField, StaffEdgeField};
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum StaffConnectionField<'a> {
-    Edges(&'a [StaffEdgeField]),
+    Edges(&'a [StaffEdgeField<'a>]),
     PageInfo(&'a [PageInfoField]),
 }
 

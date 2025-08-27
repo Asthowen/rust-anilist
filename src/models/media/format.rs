@@ -2,24 +2,24 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
 pub enum MediaFormat {
-    #[serde(alias = "TV")]
+    #[serde(rename = "TV")]
     Tv,
-    #[serde(alias = "TV_SHORT")]
+    #[serde(rename = "TV_SHORT")]
     TvShort,
-    #[serde(alias = "MOVIE")]
+    #[serde(rename = "MOVIE")]
     Movie,
-    #[serde(alias = "SPECIAL")]
+    #[serde(rename = "SPECIAL")]
     Special,
-    #[serde(alias = "OVA")]
+    #[serde(rename = "OVA")]
     Ova,
-    #[serde(alias = "ONA")]
+    #[serde(rename = "ONA")]
     Ona,
-    #[serde(alias = "MUSIC")]
+    #[serde(rename = "MUSIC")]
     Music,
-    #[serde(alias = "MANGA")]
+    #[serde(rename = "MANGA")]
     Manga,
-    #[serde(alias = "NOVEL")]
+    #[serde(rename = "NOVEL")]
     Novel,
-    #[serde(alias = "ONE_SHOT")]
+    #[serde(rename = "ONE_SHOT")]
     OneShot,
 }

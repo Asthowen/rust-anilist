@@ -1,7 +1,10 @@
-use crate::builders::fields::{CharacterField, JoinFields, StaffField, StaffRoleTypeField};
+use crate::builders::fields::{
+    CharacterField, JoinFields, MediaField, StaffField, StaffRoleTypeField,
+};
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum MediaEdgeField<'a> {
+    Node(&'a [MediaField<'a>]),
     Id,
     RelationType,
     IsMainStudio,
@@ -19,6 +22,7 @@ pub enum MediaEdgeField<'a> {
 impl MediaEdgeField<'_> {
     pub const fn all() -> &'static [MediaEdgeField<'static>] {
         const ALL: &[MediaEdgeField<'static>] = &[
+            MediaEdgeField::Node(&[MediaField::Id]),
             MediaEdgeField::Id,
             MediaEdgeField::RelationType,
             MediaEdgeField::IsMainStudio,
@@ -38,6 +42,7 @@ impl MediaEdgeField<'_> {
 impl From<MediaEdgeField<'_>> for String {
     fn from(value: MediaEdgeField) -> Self {
         match value {
+            MediaEdgeField::Node(fields) => format!("node {{ {} }}", fields.join_fields()),
             MediaEdgeField::Id => "id".to_owned(),
             MediaEdgeField::RelationType => "relationType".to_owned(),
             MediaEdgeField::IsMainStudio => "isMainStudio".to_owned(),

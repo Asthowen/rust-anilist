@@ -2,10 +2,10 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
 pub enum ExternalLinkType {
-    #[serde(alias = "INFO")]
+    #[serde(rename = "INFO")]
     Info,
-    #[serde(alias = "STREAMING")]
+    #[serde(rename = "STREAMING")]
     Streaming,
-    #[serde(alias = "SOCIAL")]
+    #[serde(rename = "SOCIAL")]
     Social,
 }

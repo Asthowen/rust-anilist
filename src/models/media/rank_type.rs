@@ -2,8 +2,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
 pub enum MediaRankType {
-    #[serde(alias = "RATED")]
+    #[serde(rename = "RATED")]
     Rated,
-    #[serde(alias = "POPULAR")]
+    #[serde(rename = "POPULAR")]
     Popular,
 }

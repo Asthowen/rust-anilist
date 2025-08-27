@@ -10,6 +10,7 @@ pub enum AniListError {
     ApiErrors(Vec<AniListResponseError>),
     UnknownApiError(StatusCode),
     HttpRequestError(reqwest::Error),
+    JsonParseError(serde_json::Error),
     InvalidHttpHeader(reqwest::header::InvalidHeaderValue),
 }
 
@@ -49,6 +50,7 @@ impl fmt::Display for AniListError {
                 "An unknown AniList API error occurred (HTTP error code: {code})."
             ),
             Self::HttpRequestError(error) => write!(f, "HTTP request failed: {error}"),
+            Self::JsonParseError(error) => write!(f, "JSON parsing failed: {error}"),
             Self::InvalidHttpHeader(error) => write!(f, "Invalid HTTP header value: {error}"),
         }
     }

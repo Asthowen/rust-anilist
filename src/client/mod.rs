@@ -70,17 +70,18 @@ impl AniListClient {
         Ok(self
             .send_queries(&[query], access_token)
             .await?
-            .and_then(|values| values.into_iter().next()))
+            .into_iter()
+            .next())
     }
 
     pub async fn send_queries(
         &self,
         queries: &[impl QueryBuilder],
         access_token: Option<&str>,
-    ) -> Result<Option<Vec<AniListResponse>>, AniListError> {
+    ) -> Result<Vec<AniListResponse>, AniListError> {
         let first = match queries.first() {
             Some(first) => first,
-            None => return Ok(None),
+            None => return Ok(Vec::default()),
         };
 
         if !queries
@@ -124,10 +125,10 @@ impl AniListClient {
     fn parse<T: DeserializeOwned>(
         value: Value,
         wrap: fn(Box<T>) -> AniListResponse,
-    ) -> Option<AniListResponse> {
+    ) -> Result<AniListResponse, AniListError> {
         serde_json::from_value::<T>(value)
-            .ok()
-            .map(|v| wrap(Box::new(v)))
+            .map(|value| wrap(Box::new(value)))
+            .map_err(AniListError::JsonParseError)
     }
 
     async fn request(
@@ -136,7 +137,7 @@ impl AniListClient {
         variables: Map<String, Value>,
         fragments_types: &[AniListFragmentType],
         access_token: Option<&str>,
-    ) -> Result<Option<Vec<AniListResponse>>, AniListError> {
+    ) -> Result<Vec<AniListResponse>, AniListError> {
         let mut request = self
             .reqwest_client
             .post("https://graphql.anilist.co/")
@@ -159,18 +160,14 @@ impl AniListClient {
             .ok_or_else(|| AniListError::UnknownApiError(status_code))?;
         data.sort_keys();
 
-        Ok(Some(
-            data.into_iter()
-                .enumerate()
-                .filter_map(|(i, (_, value))| match fragments_types[i] {
-                    AniListFragmentType::Media => {
-                        Self::parse::<Media>(value, AniListResponse::Media)
-                    }
-                    AniListFragmentType::MediaList => {
-                        Self::parse::<MediaList>(value, AniListResponse::MediaList)
-                    }
-                })
-                .collect(),
-        ))
+        data.into_iter()
+            .enumerate()
+            .map(|(i, (_, value))| match fragments_types[i] {
+                AniListFragmentType::Media => Self::parse::<Media>(value, AniListResponse::Media),
+                AniListFragmentType::MediaList => {
+                    Self::parse::<MediaList>(value, AniListResponse::MediaList)
+                }
+            })
+            .collect()
     }
 }

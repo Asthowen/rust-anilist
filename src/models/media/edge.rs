@@ -1,10 +1,11 @@
 use crate::models::media::relation::MediaRelation;
-use crate::models::{Character, CharacterRole, Staff, StaffRoleType};
+use crate::models::{Character, CharacterRole, Media, Staff, StaffRoleType};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MediaEdge {
+    pub node: Option<Media>,
     pub id: Option<i32>,
     pub relation_type: Option<MediaRelation>,
     pub is_main_studio: Option<bool>,

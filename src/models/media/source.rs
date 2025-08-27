@@ -2,34 +2,34 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
 pub enum MediaSource {
-    #[serde(alias = "ORIGINAL")]
+    #[serde(rename = "ORIGINAL")]
     Original,
-    #[serde(alias = "MANGA")]
+    #[serde(rename = "MANGA")]
     Manga,
-    #[serde(alias = "LIGHT_NOVEL")]
+    #[serde(rename = "LIGHT_NOVEL")]
     LightNovel,
-    #[serde(alias = "VISUAL_NOVEL")]
+    #[serde(rename = "VISUAL_NOVEL")]
     VisualNovel,
-    #[serde(alias = "VIDEO_GAME")]
+    #[serde(rename = "VIDEO_GAME")]
     VideoGame,
-    #[serde(alias = "OTHER")]
+    #[serde(rename = "OTHER")]
     Other,
-    #[serde(alias = "NOVEL")]
+    #[serde(rename = "NOVEL")]
     Novel,
-    #[serde(alias = "DOUJINSHI")]
+    #[serde(rename = "DOUJINSHI")]
     Doujinshi,
-    #[serde(alias = "ANIME")]
+    #[serde(rename = "ANIME")]
     Anime,
-    #[serde(alias = "WEB_NOVEL")]
+    #[serde(rename = "WEB_NOVEL")]
     WebNovel,
-    #[serde(alias = "LIVE_ACTION")]
+    #[serde(rename = "LIVE_ACTION")]
     LiveAction,
-    #[serde(alias = "GAME")]
+    #[serde(rename = "GAME")]
     Game,
-    #[serde(alias = "COMIC")]
+    #[serde(rename = "COMIC")]
     Comic,
-    #[serde(alias = "MULTIMEDIA_PROJECT")]
+    #[serde(rename = "MULTIMEDIA_PROJECT")]
     MultimediaProject,
-    #[serde(alias = "PICTURE_BOOK")]
+    #[serde(rename = "PICTURE_BOOK")]
     PictureBook,
 }

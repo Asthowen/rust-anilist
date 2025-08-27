@@ -2,14 +2,14 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum MediaStatus {
-    #[serde(alias = "FINISHED")]
+    #[serde(rename = "FINISHED")]
     Finished,
-    #[serde(alias = "RELEASING")]
+    #[serde(rename = "RELEASING")]
     Releasing,
-    #[serde(alias = "NOT_YET_RELEASED")]
+    #[serde(rename = "NOT_YET_RELEASED")]
     NotYetReleased,
-    #[serde(alias = "CANCELLED")]
+    #[serde(rename = "CANCELLED")]
     Cancelled,
-    #[serde(alias = "HIATUS")]
+    #[serde(rename = "HIATUS")]
     Hiatus,
 }

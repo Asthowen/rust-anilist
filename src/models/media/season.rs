@@ -2,12 +2,12 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
 pub enum MediaSeason {
-    #[serde(alias = "WINTER")]
+    #[serde(rename = "WINTER")]
     Winter,
-    #[serde(alias = "SPRING")]
+    #[serde(rename = "SPRING")]
     Spring,
-    #[serde(alias = "SUMMER")]
+    #[serde(rename = "SUMMER")]
     Summer,
-    #[serde(alias = "FALL")]
+    #[serde(rename = "FALL")]
     Fall,
 }

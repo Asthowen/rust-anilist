@@ -33,7 +33,7 @@ pub(crate) mod trailer;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Media {
-    pub id: i32,
+    pub id: Option<i32>,
     pub id_mal: Option<i32>,
     pub title: Option<MediaTitle>,
     pub r#type: Option<MediaType>,

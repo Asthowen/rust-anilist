@@ -2,10 +2,10 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
 pub enum CharacterRole {
-    #[serde(alias = "MAIN")]
+    #[serde(rename = "MAIN")]
     Main,
-    #[serde(alias = "SUPPORTING")]
+    #[serde(rename = "SUPPORTING")]
     Supporting,
-    #[serde(alias = "BACKGROUND")]
+    #[serde(rename = "BACKGROUND")]
     Background,
 }

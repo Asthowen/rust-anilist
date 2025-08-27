@@ -2,20 +2,20 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
 pub enum CharacterSort {
-    #[serde(alias = "ID")]
+    #[serde(rename = "ID")]
     Id,
-    #[serde(alias = "ID_DESC")]
+    #[serde(rename = "ID_DESC")]
     IdDesc,
-    #[serde(alias = "ROLE")]
+    #[serde(rename = "ROLE")]
     Role,
-    #[serde(alias = "ROLE_DESC")]
+    #[serde(rename = "ROLE_DESC")]
     RoleDesc,
-    #[serde(alias = "SEARCH_MATCH")]
+    #[serde(rename = "SEARCH_MATCH")]
     SearchMatch,
-    #[serde(alias = "FAVOURITES")]
+    #[serde(rename = "FAVOURITES")]
     Favourites,
-    #[serde(alias = "FAVOURITES_DESC")]
+    #[serde(rename = "FAVOURITES_DESC")]
     FavouritesDesc,
-    #[serde(alias = "Relevance")]
+    #[serde(rename = "Relevance")]
     Relevance,
 }
