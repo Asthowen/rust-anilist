@@ -18,14 +18,13 @@
 ### Add to deps
 ```toml
 [dependencies]
-anilist = { git = "https://github.com/Asthowen/rust-anilist", version = "0.1.0" }
+anilist = { git = "https://github.com/Asthowen/rust-anilist", version = "0.1.1" }
 ```
 
 ### Create client
 ```rust
 let anilist_client = AniListClient::builder()
-    .build()
-    .unwrap();
+    .build()?;
 ```
 
 ### Retrieving manga from ID `64127`
@@ -46,7 +45,7 @@ anilist_client
                 MediaField::Tags(&[MediaTagField::Id, MediaTagField::Name]),
             ])
             .with_id(64127),
-        Some("token"),
+        None,
     )
     .await?;
 ```
@@ -59,7 +58,7 @@ anilist_client
             MediaQueryBuilder::new_all_fields().with_id(64127),
             MediaQueryBuilder::new_all_fields().with_id(139741),
         ],
-        Some("token"),
+        None,
     )
     .await?;
 ```
