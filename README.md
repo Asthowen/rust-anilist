@@ -23,14 +23,19 @@ anilist = { git = "https://github.com/Asthowen/rust-anilist", version = "0.1.1" 
 
 ### Create client
 ```rust
-let anilist_client = AniListClient::builder()
-    .build()?;
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let anilist_client = AniListClient::builder()
+        .build()?;
+
+    Ok(())
+}
 ```
 
 ### Retrieving manga from ID `64127`
 ```rust
 anilist_client
-    .send_query(MediaQueryBuilder::new_all_fields().with_id(64127), Some("token"))
+    .send_query(MediaQueryBuilder::new_all_fields().with_id(64127), None)
     .await?;
 ```
 
@@ -59,6 +64,51 @@ anilist_client
             MediaQueryBuilder::new_all_fields().with_id(139741),
         ],
         None,
+    )
+    .await?;
+```
+
+### Marking chapter 5 of manga `64127` as read
+```rust
+anilist_client
+    .send_query(
+        SaveMediaListEntryMutationBuilder::new()
+            .with_fields(&[MediaListField::MediaId])
+            .with_media_id(64127)
+            .set_progress_to(5),
+        Some("token"),
+    )
+    .await?;
+```
+
+### Marking volume 5 of manga `64127` as read
+```rust
+anilist_client
+    .send_query(
+        SaveMediaListEntryMutationBuilder::new()
+            .with_fields(&[MediaListField::MediaId])
+            .with_media_id(64127)
+            .set_volumes_progress_to(5),
+        Some("token"),
+    )
+    .await?;
+```
+
+### Marking chapters 5-15 of manga `64127` as read
+```rust
+anilist_client
+    .send_queries(
+        &[
+            SaveMediaListEntryMutationBuilder::new()
+                .with_fields(&[MediaListField::MediaId])
+                .with_media_id(64127)
+                .set_progress_to(5),
+            SaveMediaListEntryMutationBuilder::new()
+                .with_fields(&[MediaListField::MediaId])
+                .with_media_id(64127)
+                .set_progress_to(15),
+        ],
+        Some("token"),
     )
     .await?;
 ```
