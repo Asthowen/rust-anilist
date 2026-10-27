@@ -1,6 +1,6 @@
 use crate::builders::fields::{JoinFields, MediaField};
 
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum MediaListField<'a> {
     Id,
     UserId,

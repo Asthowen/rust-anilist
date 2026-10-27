@@ -1,9 +1,8 @@
-use crate::models::media::Media;
-use crate::models::media::edge::MediaEdge;
-use crate::models::util::page_info::PageInfo;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+use crate::models::{Media, MediaEdge, PageInfo};
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MediaConnection {
     pub edges: Option<Vec<MediaEdge>>,

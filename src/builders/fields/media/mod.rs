@@ -15,7 +15,7 @@ use crate::builders::fields::{
     StaffConnectionField,
 };
 
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum MediaField<'a> {
     Id,
     IdMal,

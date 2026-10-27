@@ -1,6 +1,6 @@
-use crate::client::AniListResponseError;
 use reqwest::StatusCode;
-use std::fmt;
+
+use crate::client::AniListResponseError;
 
 #[derive(Debug)]
 pub enum AniListError {
@@ -27,8 +27,8 @@ impl From<reqwest::header::InvalidHeaderValue> for AniListError {
     }
 }
 
-impl fmt::Display for AniListError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+impl std::fmt::Display for AniListError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         match self {
             Self::MissingBuilderField(field) => write!(f, "Missing required field: {field}"),
             Self::UnknownQuery => write!(

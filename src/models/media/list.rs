@@ -1,8 +1,9 @@
-use crate::models::{FuzzyDate, Media, MediaListStatus};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+use crate::models::{FuzzyDate, Media, MediaListStatus};
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MediaList {
     pub id: Option<i32>,

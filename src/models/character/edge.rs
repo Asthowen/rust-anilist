@@ -1,7 +1,8 @@
-use crate::models::{Character, CharacterRole, Media, Staff, StaffRoleType};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+use crate::models::{Character, CharacterRole, Media, Staff, StaffRoleType};
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CharacterEdge {
     pub node: Option<Character>,

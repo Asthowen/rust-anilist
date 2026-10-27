@@ -1,8 +1,8 @@
-use crate::models::media::relation::MediaRelation;
-use crate::models::{Character, CharacterRole, Media, Staff, StaffRoleType};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+use crate::models::{Character, CharacterRole, Media, MediaRelation, Staff, StaffRoleType};
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MediaEdge {
     pub node: Option<Media>,

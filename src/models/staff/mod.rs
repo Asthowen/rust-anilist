@@ -4,12 +4,15 @@ pub(crate) mod image;
 pub(crate) mod name;
 pub(crate) mod role_type;
 
-use crate::models::graphql::fuzzy_date::FuzzyDate;
-use crate::models::media::connection::MediaConnection;
-use crate::models::{CharacterConnection, StaffImage, StaffName};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+use super::character::connection::CharacterConnection;
+use super::graphql::fuzzy_date::FuzzyDate;
+use super::media::connection::MediaConnection;
+use super::staff::image::StaffImage;
+use super::staff::name::StaffName;
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Staff {
     pub id: Option<i32>,

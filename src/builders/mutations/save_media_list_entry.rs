@@ -1,7 +1,8 @@
+use serde_json::Value;
+
 use crate::builders::fields::{JoinFields, MediaField, MediaListField};
 use crate::builders::{BuiltQuery, ParametersBuilder};
 use crate::models::{FuzzyDate, MediaListStatus};
-use serde_json::Value;
 
 #[derive(Default)]
 pub struct SaveMediaListEntryMutationBuilder<'a> {

@@ -1,6 +1,6 @@
 mod structs;
 
-pub use structs::AniListResponseError;
+pub use self::structs::AniListResponseError;
 
 use crate::builders::{AniListFragmentType, AniListResponse, QueryBuilder};
 use crate::client::structs::{AniListResponseInternal, Request};
@@ -19,7 +19,7 @@ use std::time::Duration;
 pub const DEFAULT_TIMEOUT: Duration = Duration::from_secs(20);
 const JSON_HEADER: HeaderValue = HeaderValue::from_static("application/json");
 
-#[derive(Default, Clone)]
+#[derive(Clone, Default)]
 pub struct AniListClientBuilder {
     reqwest_client: Option<reqwest::Client>,
     timeout: Option<Duration>,

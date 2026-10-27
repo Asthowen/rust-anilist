@@ -2,19 +2,19 @@ use reqwest::StatusCode;
 use serde::{Deserialize, Deserializer, Serialize};
 use serde_json::{Map, Value};
 
-#[derive(Debug, Clone, PartialEq, Serialize)]
+#[derive(Clone, Debug, PartialEq, Serialize)]
 pub(crate) struct Request<'a> {
     pub query: &'a str,
     pub variables: Map<String, Value>,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct AniListResponseErrorLocation {
     pub line: usize,
     pub column: usize,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct AniListResponseError {
     pub message: String,
     #[serde(deserialize_with = "deserialize_status_code")]
@@ -22,7 +22,7 @@ pub struct AniListResponseError {
     pub locations: Option<Vec<AniListResponseErrorLocation>>,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 pub(crate) struct AniListResponseInternal<T> {
     pub data: Option<T>,
     pub errors: Option<Vec<AniListResponseError>>,

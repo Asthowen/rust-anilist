@@ -1,7 +1,8 @@
+use serde_json::Value;
+
 use crate::builders::fields::{JoinFields, MediaField};
 use crate::builders::{BuiltQuery, ParametersBuilder};
 use crate::models::MediaType;
-use serde_json::Value;
 
 #[derive(Default)]
 pub struct MediaQueryBuilder<'a> {

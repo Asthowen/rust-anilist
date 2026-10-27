@@ -1,17 +1,3 @@
-use crate::models::airing::schedule::AiringSchedule;
-use crate::models::character::connection::CharacterConnection;
-use crate::models::graphql::country_code::CountryCode;
-use crate::models::graphql::fuzzy_date::FuzzyDate;
-use crate::models::media::connection::MediaConnection;
-use crate::models::media::cover_image::MediaCoverImage;
-use crate::models::media::mtype::MediaType;
-use crate::models::staff::connection::StaffConnection;
-use crate::models::{
-    MediaExternalLink, MediaFormat, MediaSeason, MediaSource, MediaStatus, MediaTag, MediaTitle,
-    MediaTrailer,
-};
-use serde::{Deserialize, Serialize};
-
 pub(crate) mod connection;
 pub(crate) mod cover_image;
 pub(crate) mod edge;
@@ -30,7 +16,15 @@ pub(crate) mod tag;
 pub(crate) mod title;
 pub(crate) mod trailer;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+use serde::{Deserialize, Serialize};
+
+use crate::models::{
+    AiringSchedule, CharacterConnection, CountryCode, FuzzyDate, MediaConnection, MediaCoverImage,
+    MediaExternalLink, MediaFormat, MediaSeason, MediaSource, MediaStatus, MediaTag, MediaTitle,
+    MediaTrailer, MediaType, StaffConnection,
+};
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Media {
     pub id: Option<i32>,

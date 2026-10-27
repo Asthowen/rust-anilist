@@ -1,6 +1,6 @@
 use crate::builders::fields::{JoinFields, MediaEdgeField, PageInfoField};
 
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum MediaConnectionField<'a> {
     Edges(&'a [MediaEdgeField<'a>]),
     PageInfo(&'a [PageInfoField]),

@@ -1,24 +1,28 @@
-use crate::models::{Media, MediaList};
-use serde::{Deserialize, Serialize};
-use serde_json::{Map, Value};
-use std::fmt::{Display, Formatter};
-
 pub mod fields;
+
 mod mutations;
 mod parameters_builder;
 mod queries;
 
-pub use mutations::save_media_list_entry::SaveMediaListEntryMutationBuilder;
-pub(crate) use parameters_builder::ParametersBuilder;
-pub use queries::media::MediaQueryBuilder;
+pub use self::mutations::save_media_list_entry::SaveMediaListEntryMutationBuilder;
+pub use self::queries::media::MediaQueryBuilder;
 
-#[derive(Debug, Copy, Clone, PartialEq)]
+pub(crate) use self::parameters_builder::ParametersBuilder;
+
+use std::fmt::{Display, Formatter};
+
+use serde::{Deserialize, Serialize};
+use serde_json::{Map, Value};
+
+use crate::models::{Media, MediaList};
+
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum AniListFragmentType {
     Media,
     MediaList,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub enum AniListResponse {
     Media(Box<Media>),
     MediaList(Box<MediaList>),
@@ -30,7 +34,7 @@ pub struct BuiltQuery {
     pub parameters_definitions: Vec<String>,
 }
 
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum RootOperationType {
     Query,
     Mutation,

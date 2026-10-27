@@ -1,7 +1,8 @@
 pub mod builders;
-mod client;
-mod errors;
 pub mod models;
 
+mod client;
+mod errors;
+
+pub use self::client::{AniListClient, AniListClientBuilder};
 pub use self::errors::AniListError;
-pub use crate::client::{AniListClient, AniListClientBuilder};

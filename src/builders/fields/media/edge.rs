@@ -2,7 +2,7 @@ use crate::builders::fields::{
     CharacterField, JoinFields, MediaField, StaffField, StaffRoleTypeField,
 };
 
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum MediaEdgeField<'a> {
     Node(&'a [MediaField<'a>]),
     Id,

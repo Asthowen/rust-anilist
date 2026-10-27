@@ -1,7 +1,8 @@
-use crate::models::util::external_link_type::ExternalLinkType;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+use crate::models::ExternalLinkType;
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MediaExternalLink {
     pub id: Option<i32>,

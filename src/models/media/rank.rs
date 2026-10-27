@@ -1,7 +1,8 @@
-use crate::models::{MediaFormat, MediaRankType, MediaSeason};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+use crate::models::{MediaFormat, MediaRankType, MediaSeason};
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct MediaRank {
     pub id: Option<i32>,

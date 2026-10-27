@@ -1,7 +1,8 @@
-use crate::models::Staff;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+use crate::models::Staff;
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct StaffEdge {
     pub node: Option<Staff>,

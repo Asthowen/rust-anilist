@@ -1,7 +1,8 @@
-use serde::{Deserialize, Serialize};
 use std::fmt::{Display, Formatter};
 
-#[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Copy, Clone, Debug, PartialEq, Deserialize, Serialize)]
 pub enum MediaType {
     #[serde(rename = "ANIME")]
     Anime,

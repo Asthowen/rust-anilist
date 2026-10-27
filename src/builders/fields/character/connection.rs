@@ -1,6 +1,6 @@
 use crate::builders::fields::{CharacterEdgeField, JoinFields, PageInfoField};
 
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum CharacterConnectionField<'a> {
     Edges(&'a [CharacterEdgeField<'a>]),
     PageInfo(&'a [PageInfoField]),

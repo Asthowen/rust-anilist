@@ -1,5 +1,6 @@
-use crate::builders::BuiltQuery;
 use serde_json::{Map, Value};
+
+use crate::builders::BuiltQuery;
 
 pub(crate) struct ParametersBuilder {
     variables: Map<String, Value>,

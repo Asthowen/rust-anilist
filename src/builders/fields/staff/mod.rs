@@ -9,7 +9,7 @@ use crate::builders::fields::{
     StaffImageField, StaffNameField,
 };
 
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum StaffField<'a> {
     Id,
     Name(&'a [StaffNameField]),

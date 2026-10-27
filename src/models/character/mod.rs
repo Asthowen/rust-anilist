@@ -1,8 +1,9 @@
+use serde::{Deserialize, Serialize};
+
 use crate::models::character::image::CharacterImage;
 use crate::models::character::name::CharacterName;
 use crate::models::graphql::fuzzy_date::FuzzyDate;
 use crate::models::media::connection::MediaConnection;
-use serde::{Deserialize, Serialize};
 
 pub(crate) mod connection;
 pub(crate) mod edge;
@@ -11,7 +12,7 @@ pub(crate) mod name;
 pub(crate) mod role;
 pub(crate) mod sort;
 
-#[derive(Debug, Default, Clone, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Character {
     pub id: Option<i32>,

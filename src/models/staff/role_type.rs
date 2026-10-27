@@ -1,7 +1,8 @@
-use crate::models::Staff;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Default, Clone, Serialize, Deserialize)]
+use crate::models::Staff;
+
+#[derive(Clone, Debug, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct StaffRoleType {
     pub voice_actor: Option<Staff>,
